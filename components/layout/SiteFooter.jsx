@@ -5,9 +5,20 @@ const FOOTER_COLUMNS = [
     title: "Product",
     links: [
       { label: "Features", href: "/#features" },
-      { label: "Pricing", href: "/#pricing" },
-      { label: "How it works", href: "/#how-it-works" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "How it works", href: "/how-it-works" },
       { label: "FAQ", href: "/#faq" }
+    ]
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "What is a UX audit?", href: "/what-is-a-ux-audit" },
+      {
+        label: "Why isn't my site converting?",
+        href: "/why-is-my-website-not-converting"
+      },
+      { label: "Usability checklist", href: "/website-usability-checklist" }
     ]
   },
   {

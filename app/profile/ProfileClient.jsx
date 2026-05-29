@@ -11,6 +11,7 @@ import {
   resolveFullName,
   resolveInitial
 } from "../../lib/user/display.js";
+import UserAvatar from "../../components/layout/UserAvatar.jsx";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -94,7 +95,7 @@ export default function ProfileClient({ user }) {
             <div className="profile-card-head">
               <span className="profile-card-avatar">
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt="" className="profile-card-avatar-img" />
+                  <UserAvatar src={avatarUrl} size={64} className="profile-card-avatar-img" />
                 ) : (
                   <span className="profile-card-avatar-fallback">{initial}</span>
                 )}

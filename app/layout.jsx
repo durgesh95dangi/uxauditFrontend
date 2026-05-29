@@ -32,7 +32,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`}>
-      <body>{children}</body>
+      <body className={`${GeistSans.className} antialiased`}>{children}</body>
     </html>
   );
 }

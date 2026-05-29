@@ -19,6 +19,7 @@ export default function ExampleFindingCard({ finding }) {
             width={400}
             height={220}
             className="finding-proof-img"
+            loading="lazy"
           />
           <span className={`finding-proof-pin finding-proof-pin--${finding.severity}`} aria-hidden="true" />
         </div>

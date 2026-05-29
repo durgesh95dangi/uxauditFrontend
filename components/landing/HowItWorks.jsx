@@ -13,21 +13,21 @@ const STEPS = [
   {
     num: 1,
     title: "Paste your link",
-    body: "Drop in any web page. Nothing to install, no code, no setup.",
+    body: "Drop in any web page. There's nothing to install and no setup at all. Works with any URL — Webflow, Framer, Shopify, custom code, whatever you're on.",
     tone: "indigo",
     chromeLabel: "New report"
   },
   {
     num: 2,
     title: "We look at every section",
-    body: "We scroll through your whole page and take a picture of each part — just like a real visitor.",
+    body: "We scroll through your whole page the same way a first-time visitor would — on both phone and computer. We take a picture of each section as we go.",
     tone: "violet",
     chromeLabel: "Checking"
   },
   {
     num: 3,
     title: "Your report is ready",
-    body: "You get a clear list with the biggest problems first — each with a picture and a simple fix.",
+    body: "You get a clear list with the biggest problems at the top. Each one has a screenshot of exactly where the issue is, why it matters, and a specific fix — not vague advice, real suggestions you can act on today.",
     tone: "blue",
     chromeLabel: "Report"
   }
@@ -152,10 +152,7 @@ export default function HowItWorks() {
           <SectionEyebrow icon={IconLink} center>
             How it works
           </SectionEyebrow>
-          <h2 className="section-title">Paste, check, report</h2>
-          <p className="section-lead">
-            From link to a clear list of what to fix — in about a minute.
-          </p>
+          <h2 className="section-title">Three steps, one minute, real answers</h2>
         </div>
 
         <div className="grid flow-steps-grid section-grid">

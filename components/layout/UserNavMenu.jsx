@@ -9,6 +9,7 @@ import {
   resolveNavName,
   truncateName
 } from "../../lib/user/display.js";
+import UserAvatar from "./UserAvatar.jsx";
 
 function ChevronIcon() {
   return (
@@ -84,7 +85,7 @@ export default function UserNavMenu({ user, onSignOut, isSigningOut = false }) {
       >
         <span className="nav-user-avatar">
           {avatarUrl ? (
-            <img src={avatarUrl} alt="" className="nav-user-avatar-img" />
+            <UserAvatar src={avatarUrl} size={28} className="nav-user-avatar-img" />
           ) : (
             <span className="nav-user-avatar-fallback">{initial}</span>
           )}

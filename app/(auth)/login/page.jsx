@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
+import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -100,13 +101,12 @@ export default function LoginPage() {
 
           <label className="auth-label">
             Password
-            <input
-              type="password"
-              required
+            <PasswordInput
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Your password"
               autoComplete="current-password"
+              required
             />
           </label>
 

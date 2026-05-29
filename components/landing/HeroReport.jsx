@@ -1,10 +1,10 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import { DEMO_SITE } from "../../lib/landing/demoSite.js";
 
 const TARGET_SCORE = 78;
-const CYCLE_MS = 7200;
+const RADIUS = 26;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+const DASH = (TARGET_SCORE / 100) * CIRCUMFERENCE;
+const SCORE_TONE = TARGET_SCORE >= 70 ? "good" : TARGET_SCORE >= 45 ? "warn" : "bad";
 
 const FINDINGS = [
   {
@@ -33,60 +33,12 @@ const FINDINGS = [
   }
 ];
 
-const RADIUS = 26;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
 export default function HeroReport() {
-  const [cycle, setCycle] = useState(0);
-  const [score, setScore] = useState(0);
-  const reducedRef = useRef(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    reducedRef.current = media.matches;
-    if (media.matches) {
-      setScore(TARGET_SCORE);
-      return undefined;
-    }
-    const id = setInterval(() => setCycle((c) => c + 1), CYCLE_MS);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    if (reducedRef.current) return undefined;
-
-    let raf;
-    let start;
-    const duration = 1500;
-    const delay = 700;
-
-    setScore(0);
-    const timeout = setTimeout(() => {
-      const run = (ts) => {
-        if (start === undefined) start = ts;
-        const progress = Math.min((ts - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setScore(Math.round(eased * TARGET_SCORE));
-        if (progress < 1) raf = requestAnimationFrame(run);
-      };
-      raf = requestAnimationFrame(run);
-    }, delay);
-
-    return () => {
-      clearTimeout(timeout);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [cycle]);
-
-  const dash = (score / 100) * CIRCUMFERENCE;
-  const scoreTone =
-    score >= 70 ? "good" : score >= 45 ? "warn" : "bad";
-
   return (
     <div className="hero-report" aria-hidden="true">
       <div className="hero-report-glow" />
 
-      <div className="hero-report-card" key={cycle}>
+      <div className="hero-report-card">
         <div className="hero-report-chrome">
           <span className="hero-report-dot" />
           <span className="hero-report-dot" />
@@ -100,7 +52,7 @@ export default function HeroReport() {
 
         <div className="hero-report-body">
           <div className="hero-report-head hero-report-head--in">
-            <div className={`hero-report-score hero-report-score--${scoreTone}`}>
+            <div className={`hero-report-score hero-report-score--${SCORE_TONE}`}>
               <svg viewBox="0 0 64 64" className="hero-report-ring">
                 <circle
                   className="hero-report-ring-track"
@@ -109,14 +61,14 @@ export default function HeroReport() {
                   r={RADIUS}
                 />
                 <circle
-                  className="hero-report-ring-value"
+                  className="hero-report-ring-value hero-report-ring-value--animate"
                   cx="32"
                   cy="32"
                   r={RADIUS}
-                  strokeDasharray={`${dash} ${CIRCUMFERENCE}`}
+                  strokeDasharray={`${DASH} ${CIRCUMFERENCE}`}
                 />
               </svg>
-              <span className="hero-report-score-num">{score}</span>
+              <span className="hero-report-score-num">{TARGET_SCORE}</span>
             </div>
 
             <div className="hero-report-head-meta">

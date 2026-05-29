@@ -38,11 +38,19 @@ export async function proxy(request) {
     return NextResponse.redirect(url);
   }
 
+  if (pathname === "/" && user) {
+    const url = request.nextUrl.clone();
+    url.pathname = isSuperadmin(user) ? "/admin" : "/dashboard";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
   return response;
 }
 
 export const config = {
   matcher: [
+    "/",
     "/dashboard/:path*",
     "/profile/:path*",
     "/admin/:path*",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
+import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function SignupPage() {
   const supabase = getSupabaseBrowserClient();
@@ -111,14 +112,13 @@ export default function SignupPage() {
 
           <label className="auth-label">
             Password
-            <input
-              type="password"
-              required
-              minLength={8}
+            <PasswordInput
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Minimum 8 characters"
               autoComplete="new-password"
+              minLength={8}
+              required
             />
           </label>
 

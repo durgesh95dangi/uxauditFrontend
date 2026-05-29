@@ -29,7 +29,7 @@ export default function FeatureVisual({ type }) {
             width={640}
             height={420}
             className="feature-visual-img"
-            priority
+            loading="lazy"
           />
           <div className="feature-visual-scan-beam" aria-hidden="true" />
           <div className="feature-visual-capture-tags" aria-hidden="true">
@@ -51,6 +51,7 @@ export default function FeatureVisual({ type }) {
             width={640}
             height={420}
             className="feature-visual-img"
+            loading="lazy"
           />
         </div>
       </div>
@@ -66,6 +67,7 @@ export default function FeatureVisual({ type }) {
           width={640}
           height={420}
           className="feature-visual-img"
+          loading="lazy"
         />
       </div>
     </div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getSupabaseServerClient } from "../lib/supabase/server.js";
+import dynamic from "next/dynamic";
 import GridFrame from "../components/layout/GridFrame.jsx";
 import SiteNav from "../components/layout/SiteNav.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
@@ -8,10 +7,10 @@ import MeshGradient from "../components/layout/MeshGradient.jsx";
 import CompanyLogos from "../components/landing/CompanyLogos.jsx";
 import ExampleFindingCard from "../components/landing/ExampleFindingCard.jsx";
 import HeroReport from "../components/landing/HeroReport.jsx";
-import HowItWorks from "../components/landing/HowItWorks.jsx";
-import FeatureVisual from "../components/landing/FeatureVisual.jsx";
+import PricingSection from "../components/landing/PricingSection.jsx";
 import AnimateIn from "../components/landing/AnimateIn.jsx";
-import LandingFaq from "../components/landing/LandingFaq.jsx";
+import SchemaMarkup from "../components/SchemaMarkup.jsx";
+import { howItWorksSchema } from "../lib/landing/howItWorksSchema.js";
 import {
   IconAlert,
   IconBadge,
@@ -34,53 +33,129 @@ import {
   IconZap,
   SectionEyebrow
 } from "../components/landing/LandingIcons.jsx";
-import { createAbsoluteTitleMetadata } from "../lib/metadata.js";
+import { createAbsoluteTitleMetadata, SITE_URL } from "../lib/metadata.js";
+
+const FeatureVisual = dynamic(() => import("../components/landing/FeatureVisual.jsx"), {
+  ssr: true
+});
+
+const HowItWorks = dynamic(() => import("../components/landing/HowItWorks.jsx"), {
+  ssr: true
+});
+
+const LandingFaq = dynamic(() => import("../components/landing/LandingFaq.jsx"), {
+  ssr: true
+});
 
 export const metadata = createAbsoluteTitleMetadata({
   title: "Free Website UX Audit Tool — Find What's Losing You Customers | UXAuditX",
   description:
-    "Paste your URL and get a prioritized report of UX, CRO, and usability issues — with screenshots. Free. No code. Ready in under a minute.",
-  openGraphTitle: "UXAuditX — Website Audit With Screenshots",
-  openGraphDescription:
-    "Find what's confusing visitors on your site. Every issue comes with a picture and a simple fix."
+    "Paste your URL and get a prioritized list of UX, CRO and usability issues with screenshots. Free. No code. Ready in under a minute."
 });
 
-export const dynamic = "force-dynamic";
+const softwareApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "UXAuditX",
+  applicationCategory: "BusinessApplication",
+  description:
+    "Automated website UX audit tool that takes screenshots of every section and delivers a prioritized report of usability, CRO, and design issues.",
+  url: SITE_URL,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD"
+  },
+  featureList: [
+    "Automated UX audit with screenshots",
+    "CRO issue detection",
+    "Mobile and desktop analysis",
+    "Severity-ranked report",
+    "No code required"
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How does UXAuditX work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "You paste your URL. We open your site, scroll through every section like a visitor, take screenshots, and build a report. Each issue shows you the exact spot on your page, how serious it is, and what to do about it. Most reports are ready in under a minute."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Is UXAuditX free?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. The free Starter plan gives you 3 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "What does a UX audit check?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Button and CTA clarity, readability, mobile layout issues, trust signals, page speed problems, and whether your headline makes sense to a first-time visitor. It checks both desktop and phone."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Do I need to install anything?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Paste a link, get a report. Nothing to install, no code, no browser extension."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "How is this different from a speed test?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Speed tests only check load time. UXAuditX looks at everything a real visitor actually sees — clarity, layout, trust, mobile usability, and whether people know what to do next. Speed is one part of it, but it's far from the whole picture."
+      }
+    }
+  ]
+};
 
 const WHY_CHOOSE = [
   {
-    title: "Made for non-technical people",
-    body: "If you can paste a link, you can use it. No code, no setup, and no confusing terms.",
-    icon: IconUsers,
-    tone: "indigo"
-  },
-  {
-    title: "See the proof, not just a score",
-    body: "Every issue comes with a picture of exactly where it is on your page.",
+    title: "Evidence over scores",
+    body: "Most tools give you a number. We give you a picture. Every issue points to the exact spot on your page — you can see the problem in under three seconds.",
     icon: IconScreenshot,
     tone: "violet"
   },
   {
-    title: "Fixes you can actually act on",
-    body: "Each problem includes a clear, simple suggestion for what to do next.",
+    title: "Made for non-technical people",
+    body: "You don't need to know what \"cumulative layout shift\" means. We write every finding in plain language. If you can paste a link, you can use this.",
+    icon: IconUsers,
+    tone: "indigo"
+  },
+  {
+    title: "Fixes you can actually do",
+    body: "\"Improve usability\" isn't a fix. \"Make the button a brighter color so it stands out from the background\" is. Every issue comes with a specific, clear suggestion.",
     icon: IconCheck,
     tone: "emerald"
   },
   {
     title: "Answers in under a minute",
-    body: "Most reports are ready before your coffee is. Check again anytime you make a change.",
+    body: "Hiring a UX consultant takes weeks and costs hundreds. You can have your first report in the time it takes to make a coffee. Run it again whenever you make changes.",
     icon: IconZap,
     tone: "blue"
   },
   {
     title: "Phone and computer, both checked",
-    body: "Most visitors are on their phones, so we review your site on both.",
+    body: "More than half your visitors are on their phones. We audit your site on both mobile and desktop and flag issues on each separately.",
     icon: IconPhone,
     tone: "rose"
   },
   {
     title: "Free to start",
-    body: "Run 3 reports a month at no cost. No card needed to sign up.",
+    body: "Three audits a month, no credit card, no catch.",
     icon: IconStar,
     tone: "amber"
   }
@@ -115,38 +190,38 @@ const POWER_FEATURES = [
 
 const AUDIT_AREAS = [
   {
-    title: "Buttons & next steps",
-    body: "Whether your main button stands out and what to do next is obvious at a glance.",
+    title: "Buttons and next steps",
+    body: "Is your main button obvious at a glance? Does it stand out from everything around it? Is there a clear next step after someone reads your headline?",
     icon: IconPointer,
     tone: "indigo"
   },
   {
     title: "Loading speed",
-    body: "Slow sections and content that jumps around while your page is still loading.",
+    body: "Slow sections and content that jumps around while your page is still loading. Both hurt trust and conversions.",
     icon: IconGauge,
     tone: "blue"
   },
   {
-    title: "Easy to read & use",
-    body: "Hard-to-read text, unclear labels, and anything that makes the page confusing.",
+    title: "Readability",
+    body: "Hard-to-read text, tiny font sizes, low contrast, unclear labels. If someone has to squint or re-read, they'll leave.",
     icon: IconEye,
     tone: "violet"
   },
   {
-    title: "Looks right on phones",
-    body: "Buttons too small to tap, overlapping pieces, and text that breaks on a phone screen.",
+    title: "Mobile layout",
+    body: "Buttons too small to tap, text that breaks awkwardly, overlapping elements on a phone screen.",
     icon: IconPhone,
     tone: "emerald"
   },
   {
-    title: "Builds trust",
-    body: "Reviews, policies, and security cues — the things that reassure people before they pay.",
+    title: "Trust signals",
+    body: "Reviews, privacy links, security badges, and refund policies. These are the things that reassure people right before they pay.",
     icon: IconShield,
     tone: "amber"
   },
   {
     title: "Clear message",
-    body: "Whether a new visitor can tell what you offer within a few seconds of arriving.",
+    body: "Can a new visitor tell what you offer within five seconds of landing? If not, most of them will click away.",
     icon: IconText,
     tone: "rose"
   }
@@ -188,73 +263,12 @@ const SAMPLE_FINDINGS = [
   }
 ];
 
-const PLANS = [
-  {
-    name: "Starter",
-    price: "$0",
-    period: "/mo",
-    desc: "Enough to try it on your own site.",
-    icon: IconStar,
-    tone: "blue",
-    features: [
-      "3 reports a month",
-      "Computer & phone report",
-      "A picture with every issue",
-      "Email support"
-    ],
-    featured: false,
-    cta: "Get started",
-    href: "/signup"
-  },
-  {
-    name: "Pro",
-    price: "$49",
-    period: "/mo",
-    desc: "For teams improving their site every week.",
-    icon: IconZap,
-    tone: "violet",
-    features: [
-      "Unlimited reports",
-      "Computer & phone screenshots",
-      "Full details for every issue",
-      "Priority support",
-      "Shareable report links"
-    ],
-    featured: true,
-    cta: "Get started",
-    href: "/signup"
-  },
-  {
-    name: "Agency",
-    price: "Custom",
-    period: "",
-    desc: "Multiple client sites, invoicing, and onboarding help.",
-    icon: IconUsers,
-    tone: "indigo",
-    features: [
-      "Volume pricing",
-      "Shared workspace (coming soon)",
-      "White-label reports (coming soon)",
-      "Direct support channel"
-    ],
-    featured: false,
-    cta: "Email us",
-    href: "mailto:hello@uxauditx.com"
-  }
-];
-
-export default async function LandingPage() {
-  const supabase = await getSupabaseServerClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    redirect("/dashboard");
-  }
-
+export default function LandingPage() {
   return (
     <div className="page-shell">
+      <SchemaMarkup schema={softwareApplicationSchema} />
+      <SchemaMarkup schema={faqSchema} />
+      <SchemaMarkup schema={howItWorksSchema} />
       <SiteNav />
 
       <main>
@@ -270,27 +284,22 @@ export default async function LandingPage() {
                     See your site through your visitors&apos; eyes
                   </div>
                   <h1 className="hero-title">
-                    See what&apos;s wrong with your site — with screenshots
+                    See what&apos;s actually losing you customers — with screenshots
                   </h1>
                   <p className="hero-lead">
-                    UXAuditX opens your website, takes pictures of every section,
-                    and hands you a clear list of what&apos;s confusing or losing
-                    customers — with simple fixes. Most reports are ready in under a
-                    minute.
+                    Paste your URL. We open your website, scroll through every section,
+                    take pictures, and hand you a plain-English list of what&apos;s broken
+                    — each with a photo of exactly where it is and a simple fix. Most
+                    reports are ready in under a minute.
                   </p>
                   <div className="hero-actions">
                     <Link href="/signup" className="btn btn-primary">
-                      Run a free audit
+                      Check my website free →
                     </Link>
-                    <a href="#how-it-works" className="btn btn-secondary">
-                      How it works
-                    </a>
                   </div>
-                  <ul className="hero-meta hero-meta-icons">
-                    <li><IconZap size={14} /> 3 free reports a month</li>
-                    <li><IconGlobe size={14} /> Nothing to install</li>
-                    <li><IconShield size={14} /> Works on any live site</li>
-                  </ul>
+                  <p className="hero-trust-line">
+                    No install · No code · No designer needed · Free plan available
+                  </p>
                 </div>
                 <div className="hero-split-visual">
                   <HeroReport />
@@ -310,11 +319,7 @@ export default async function LandingPage() {
               <SectionEyebrow icon={IconSparkles} center>
                 Why UXAuditX
               </SectionEyebrow>
-              <h2 className="section-title">Why choose UXAuditX</h2>
-              <p className="section-lead">
-                Built for busy founders and small teams — clear answers, real
-                proof, and no jargon.
-              </p>
+              <h2 className="section-title">Why people use UXAuditX instead of guessing</h2>
             </div>
             <div className="grid section-grid">
               {WHY_CHOOSE.map((item) => (
@@ -366,11 +371,12 @@ export default async function LandingPage() {
             <div className="section-header section-header-left">
               <SectionEyebrow icon={IconEye}>What we check</SectionEyebrow>
               <h2 className="section-title section-title-left">
-                What we look at on your page
+                What UXAuditX checks on your page
               </h2>
               <p className="section-lead section-lead-left">
-                We review your pages the way a first-time visitor would, and point
-                out what gets in the way of them signing up or buying.
+                We review your pages the way a first-time visitor would — looking
+                for anything that gets in the way of them signing up, buying, or
+                contacting you.
               </p>
             </div>
             <div className="grid section-grid">
@@ -403,53 +409,13 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        <section id="pricing" className="section-band">
-          <div className="container">
-            <div className="section-header section-header-center">
-              <SectionEyebrow icon={IconStar} center>Plans</SectionEyebrow>
-              <h2 className="section-title">Pricing</h2>
-              <p className="section-lead">
-                Start on Starter. Upgrade when you&apos;re running audits every week.
-              </p>
-            </div>
-            <div className="grid pricing-grid section-grid">
-              {PLANS.map((plan) => (
-                <article
-                  key={plan.name}
-                  className={`span-4 pricing-card${plan.featured ? " pricing-card-featured" : ""}`}
-                >
-                  {plan.featured && (
-                    <span className="pricing-badge">Recommended</span>
-                  )}
-                  <IconBadge icon={plan.icon} tone={plan.tone} className="pricing-card-icon" />
-                  <h3>{plan.name}</h3>
-                  <p className="pricing-price">
-                    {plan.price}
-                    {plan.period && <span>{plan.period}</span>}
-                  </p>
-                  <p className="pricing-desc">{plan.desc}</p>
-                  <ul className="pricing-features">
-                    {plan.features.map((f) => (
-                      <li key={f}>{f}</li>
-                    ))}
-                  </ul>
-                  <Link
-                    href={plan.href}
-                    className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
-                  >
-                    {plan.cta}
-                  </Link>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <PricingSection />
 
         <section id="faq" className="section-band section-band-soft">
           <div className="container section-band-narrow">
             <div className="section-header section-header-left">
               <SectionEyebrow icon={IconFile}>FAQ</SectionEyebrow>
-              <h2 className="section-title section-title-left">Questions</h2>
+              <h2 className="section-title section-title-left">Common questions</h2>
             </div>
             <LandingFaq />
           </div>

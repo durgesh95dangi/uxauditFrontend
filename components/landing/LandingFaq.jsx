@@ -5,23 +5,27 @@ import { useState } from "react";
 const FAQ_ITEMS = [
   {
     q: "How does UXAuditX work?",
-    a: "Paste your link. We open your page, take pictures of every section on both computer and phone, and give you a clear list of what to fix — with a picture and a simple suggestion for each one."
+    a: "You paste your URL. We open your site, scroll through every section like a visitor, take screenshots, and build a report. Each issue shows you the exact spot on your page, how serious it is, and what to do about it. Most reports are ready in under a minute."
   },
   {
     q: "Do I need to install anything?",
-    a: "No. Nothing to install, no code, no setup. If your page is live, we can check it."
+    a: "No. Paste a link, get a report. Nothing to install, no code, no browser extension."
   },
   {
     q: "What does it actually find?",
-    a: "Things you can see on the page: buttons that don't stand out, cramped layouts, missing trust signals, problems on phones, confusing wording, and hard-to-read text. Every item comes with a picture of where it is."
+    a: "Button and CTA clarity, readability, mobile layout issues, trust signals, page speed problems, and whether your headline makes sense to a first-time visitor. It checks both desktop and phone."
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — 3 free reports a month. No card needed to sign up."
+    a: "Yes. The free Starter plan gives you 3 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
   },
   {
     q: "How is this different from a speed test?",
-    a: "Speed tests tell you how fast your page loads. We look at your page the way a real visitor does and point out what's confusing or losing you customers — with pictures, not just scores."
+    a: "Speed tests only check load time. UXAuditX looks at everything a real visitor actually sees — clarity, layout, trust, mobile usability, and whether people know what to do next. Speed is one part of it, but it's far from the whole picture."
+  },
+  {
+    q: "Can I share the report with my designer?",
+    a: "On Pro, yes — every report has a shareable link. On the free plan, you can take screenshots or export the findings yourself."
   }
 ];
 

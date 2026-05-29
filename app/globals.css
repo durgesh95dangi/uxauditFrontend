@@ -1132,12 +1132,24 @@ p { margin: 0; }
   margin-top: var(--space-sm);
 }
 
+.hero-trust-line {
+  margin-top: var(--space-md);
+  font-size: 13px;
+  color: var(--color-mute);
+  letter-spacing: -0.01em;
+}
+
+.hero-split-copy .hero-trust-line {
+  text-align: left;
+}
+
 .hero-split-visual {
   grid-column: span 6;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
+  min-height: 420px;
 }
 
 .hero-split-visual .scan-mockup {
@@ -1271,10 +1283,20 @@ p { margin: 0; }
   fill: none;
   stroke-width: 5;
   stroke-linecap: round;
-  transition: stroke-dasharray 0.12s linear;
 }
 
-.hero-report-score--good .hero-report-ring-value { stroke: var(--color-success); }
+.hero-report-ring-value--animate {
+  stroke-dasharray: 0 163.36;
+  animation: hero-report-ring-fill 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+}
+
+@keyframes hero-report-ring-fill {
+  to {
+    stroke-dasharray: var(--hero-ring-dash, 127.42) 163.36;
+  }
+}
+
+.hero-report-score--good .hero-report-ring-value { stroke: var(--color-success); --hero-ring-dash: 127.42; }
 .hero-report-score--warn .hero-report-ring-value { stroke: var(--color-warning); }
 .hero-report-score--bad .hero-report-ring-value { stroke: var(--color-error); }
 
@@ -4164,7 +4186,7 @@ p { margin: 0; }
 
 .site-footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1.25fr repeat(4, 1fr);
   gap: var(--space-2xl) var(--space-xl);
   margin-bottom: var(--space-4xl);
 }
@@ -4322,6 +4344,188 @@ p { margin: 0; }
   text-underline-offset: 2px;
 }
 
+.legal-section ol {
+  margin: 0 0 var(--space-md);
+  padding-left: var(--space-lg);
+  display: grid;
+  gap: 10px;
+}
+
+.guide-direct-answer {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--color-ink);
+  margin: 0;
+  padding: var(--space-lg);
+  border-left: 3px solid var(--color-link, #2563eb);
+  background: var(--color-canvas-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.guide-cta {
+  margin-top: var(--space-3xl);
+  padding: var(--space-2xl);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg, 12px);
+  background: var(--color-canvas-soft);
+  text-align: center;
+}
+
+.guide-cta--inline {
+  margin-top: var(--space-2xl);
+}
+
+.checklist-widget {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.checklist-progress {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg, 12px);
+  background: var(--color-canvas-soft);
+}
+
+.checklist-progress-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.checklist-progress-count {
+  color: var(--color-ink);
+}
+
+.checklist-progress-pct {
+  color: var(--color-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.checklist-progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-hairline);
+  overflow: hidden;
+}
+
+.checklist-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-link, #2563eb);
+  transition: width 0.25s ease;
+}
+
+.checklist-group h2 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-md);
+}
+
+.checklist-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-sm);
+  background: var(--color-canvas);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.checklist-item:hover {
+  border-color: color-mix(in srgb, var(--color-link, #2563eb) 35%, var(--color-hairline));
+}
+
+.checklist-item--checked {
+  background: color-mix(in srgb, var(--color-link, #2563eb) 6%, var(--color-canvas));
+  border-color: color-mix(in srgb, var(--color-link, #2563eb) 25%, var(--color-hairline));
+}
+
+.checklist-item input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: var(--color-link, #2563eb);
+  cursor: pointer;
+}
+
+.checklist-item-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.checklist-item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.45;
+}
+
+.checklist-item-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-body);
+}
+
+.checklist-item--checked .checklist-item-title {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--color-mute) 70%, transparent);
+  color: var(--color-mute);
+}
+
+.guide-cta-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 var(--space-sm);
+}
+
+.guide-cta-body {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-body);
+  margin: 0 0 var(--space-lg);
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.guide-faq {
+  display: grid;
+  gap: var(--space-lg);
+  margin: 0;
+}
+
+.guide-faq-item dt {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.guide-faq-item dd {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-body);
+  margin: 0;
+}
+
 .legal-highlights {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -4450,6 +4654,39 @@ p { margin: 0; }
   font: inherit;
   font-size: 14px;
   box-shadow: var(--shadow-inset);
+}
+
+.auth-password-field {
+  position: relative;
+}
+
+.auth-password-field input {
+  padding-right: 40px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--color-mute);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease;
+}
+
+.auth-password-toggle:hover {
+  color: var(--color-ink);
+}
+
+.auth-password-toggle:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: -2px;
 }
 
 .auth-label input:focus {
