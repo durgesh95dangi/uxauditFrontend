@@ -10,7 +10,10 @@ ENV NODE_ENV=production \
 # Railway sets PORT at runtime; Next.js reads process.env.PORT
 
 # Install deps (postinstall skips browser download — browsers come from the base image).
+# `npm ci` runs `postinstall`, which references `scripts/ensure-playwright-browsers.mjs`.
+# Copy scripts before installing deps so the postinstall file exists.
 COPY package.json package-lock.json ./
+COPY scripts ./scripts
 RUN npm ci
 
 COPY . .
