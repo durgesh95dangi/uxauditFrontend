@@ -6,8 +6,8 @@ WORKDIR /app
 ENV NODE_ENV=production \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
     NEXT_TELEMETRY_DISABLED=1 \
-    HOSTNAME=0.0.0.0 \
-    PORT=3000
+    HOSTNAME=0.0.0.0
+# Railway sets PORT at runtime; Next.js reads process.env.PORT
 
 # Install deps (postinstall skips browser download — browsers come from the base image).
 COPY package.json package-lock.json ./
