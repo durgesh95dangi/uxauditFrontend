@@ -1,0 +1,12 @@
+services:
+  uxauditx:
+    build: .
+    image: uxauditx:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    # Chromium needs extra shared memory in Docker (prevents crash during capture).
+    shm_size: "1gb"
+    init: true

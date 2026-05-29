@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+.git
+.github
+.cursor
+.env
+.env.*
+!.env.example
+*.md
+!docs/docker.md
+terminals
+test-results
+playwright-report
+blob-report
+.DS_Store
+npm-debug.log*
