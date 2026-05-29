@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postinstall": "node scripts/ensure-playwright-browsers.mjs",
+    "playwright:install": "npx playwright install --with-deps chromium",
     "postbuild": "next-sitemap",
     "start": "next start",
     "legacy-start": "npm run build:css && node src/index.js",
