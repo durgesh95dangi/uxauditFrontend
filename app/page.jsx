@@ -1,47 +1,26 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import GridFrame from "../components/layout/GridFrame.jsx";
 import SiteNav from "../components/layout/SiteNav.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
-import MeshGradient from "../components/layout/MeshGradient.jsx";
-import CompanyLogos from "../components/landing/CompanyLogos.jsx";
-import ExampleFindingCard from "../components/landing/ExampleFindingCard.jsx";
-import HeroReport from "../components/landing/HeroReport.jsx";
+import HeroOrbiFeed from "../components/landing/HeroOrbiFeed.jsx";
+import OrbiSolutionSection from "../components/landing/OrbiSolutionSection.jsx";
 import PricingSection from "../components/landing/PricingSection.jsx";
-import AnimateIn from "../components/landing/AnimateIn.jsx";
 import SchemaMarkup from "../components/SchemaMarkup.jsx";
 import { howItWorksSchema } from "../lib/landing/howItWorksSchema.js";
 import {
-  IconAlert,
   IconBadge,
   IconCheck,
-  IconEye,
   IconFile,
-  IconGauge,
-  IconGlobe,
-  IconLayout,
   IconPhone,
-  IconPointer,
-  IconReport,
   IconScan,
   IconScreenshot,
-  IconShield,
   IconSparkles,
   IconStar,
-  IconText,
   IconUsers,
   IconZap,
   SectionEyebrow
 } from "../components/landing/LandingIcons.jsx";
 import { createAbsoluteTitleMetadata, SITE_URL } from "../lib/metadata.js";
-
-const FeatureVisual = dynamic(() => import("../components/landing/FeatureVisual.jsx"), {
-  ssr: true
-});
-
-const HowItWorks = dynamic(() => import("../components/landing/HowItWorks.jsx"), {
-  ssr: true
-});
 
 const LandingFaq = dynamic(() => import("../components/landing/LandingFaq.jsx"), {
   ssr: true
@@ -161,108 +140,6 @@ const WHY_CHOOSE = [
   }
 ];
 
-const POWER_FEATURES = [
-  {
-    title: "We look at your real, live page",
-    body:
-      "We open your website the same way a visitor does, scroll through the whole page, and take a picture of every section — on both computer and phone.",
-    mockType: "browser",
-    icon: IconGlobe,
-    tone: "indigo"
-  },
-  {
-    title: "Every issue comes with a picture",
-    body:
-      "Each problem we find points to the exact spot on your page. You get how serious it is, why it matters, and a simple suggestion to fix it.",
-    mockType: "issue",
-    icon: IconScreenshot,
-    tone: "violet"
-  },
-  {
-    title: "One clear report, most urgent first",
-    body:
-      "The biggest problems show up at the top. Work through the list yourself or share it with your designer, and check again anytime after you make changes.",
-    mockType: "report",
-    icon: IconReport,
-    tone: "blue"
-  }
-];
-
-const AUDIT_AREAS = [
-  {
-    title: "Buttons and next steps",
-    body: "Is your main button obvious at a glance? Does it stand out from everything around it? Is there a clear next step after someone reads your headline?",
-    icon: IconPointer,
-    tone: "indigo"
-  },
-  {
-    title: "Loading speed",
-    body: "Slow sections and content that jumps around while your page is still loading. Both hurt trust and conversions.",
-    icon: IconGauge,
-    tone: "blue"
-  },
-  {
-    title: "Readability",
-    body: "Hard-to-read text, tiny font sizes, low contrast, unclear labels. If someone has to squint or re-read, they'll leave.",
-    icon: IconEye,
-    tone: "violet"
-  },
-  {
-    title: "Mobile layout",
-    body: "Buttons too small to tap, text that breaks awkwardly, overlapping elements on a phone screen.",
-    icon: IconPhone,
-    tone: "emerald"
-  },
-  {
-    title: "Trust signals",
-    body: "Reviews, privacy links, security badges, and refund policies. These are the things that reassure people right before they pay.",
-    icon: IconShield,
-    tone: "amber"
-  },
-  {
-    title: "Clear message",
-    body: "Can a new visitor tell what you offer within five seconds of landing? If not, most of them will click away.",
-    icon: IconText,
-    tone: "rose"
-  }
-];
-
-const SAMPLE_FINDINGS = [
-  {
-    severity: "critical",
-    title: "Your main button is hard to see",
-    context: "On phone · top of the page",
-    section: "Top of page",
-    viewport: "Phone",
-    proof: "/landing/finding-hero-cta.svg",
-    proofAlt: "Phone screenshot with a hard-to-see button highlighted",
-    fix: "Make the button a brighter color so it stands out from the background.",
-    icon: IconAlert
-  },
-  {
-    severity: "high",
-    title: "Your headline breaks onto messy lines",
-    context: "On tablet · top of the page",
-    section: "Top of page",
-    viewport: "Tablet",
-    proof: "/landing/finding-headline.svg",
-    proofAlt: "Tablet screenshot with an awkwardly wrapped headline highlighted",
-    fix: "Shorten the headline so it reads cleanly on smaller screens.",
-    icon: IconLayout
-  },
-  {
-    severity: "medium",
-    title: "No privacy link in the footer",
-    context: "On computer · bottom of the page",
-    section: "Footer",
-    viewport: "Computer",
-    proof: "/landing/finding-footer.svg",
-    proofAlt: "Computer screenshot with a missing privacy link highlighted",
-    fix: "Add a Privacy link next to your Terms link in the footer.",
-    icon: IconFile
-  }
-];
-
 export default function LandingPage() {
   return (
     <div className="page-shell">
@@ -272,46 +149,40 @@ export default function LandingPage() {
       <SiteNav />
 
       <main>
-        <div className="landing-fold">
-          <GridFrame />
-          <section className="hero-band hero-band-split">
-            <MeshGradient />
-            <div className="container">
-              <div className="grid hero-grid hero-split">
-                <div className="hero-split-copy">
-                  <div className="hero-eyebrow hero-eyebrow-badge">
-                    <IconScan size={14} />
-                    See your site through your visitors&apos; eyes
-                  </div>
-                  <h1 className="hero-title">
-                    See what&apos;s actually losing you customers — with screenshots
+        <div className="landing-fold landing-fold-orbi">
+          <section className="hero-band hero-band-orbi">
+            <div className="container hero-orbi-container">
+              <div className="hero-orbi-stack">
+                <div className="hero-orbi-copy">
+                  <p className="hero-orbi-badge">The solution</p>
+                  <h1 className="hero-orbi-title">
+                    Turn website visitors into paying customers.
                   </h1>
-                  <p className="hero-lead">
-                    Paste your URL. We open your website, scroll through every section,
-                    take pictures, and hand you a plain-English list of what&apos;s broken
-                    — each with a photo of exactly where it is and a simple fix. Most
-                    reports are ready in under a minute.
+                  <p className="hero-orbi-lead">
+                    We look at your website through your customer&apos;s eyes,
+                    spot what&apos;s frustrating or confusing, and give you an
+                    easy-to-follow report so your team knows exactly what to
+                    fix.
                   </p>
-                  <div className="hero-actions">
-                    <Link href="/signup" className="btn btn-primary">
-                      Check my website free →
+                  <div className="hero-orbi-actions">
+                    <Link href="/signup" className="btn btn-primary hero-orbi-btn">
+                      Get free website review
                     </Link>
                   </div>
-                  <p className="hero-trust-line">
-                    No install · No code · No designer needed · Free plan available
+                  <p className="hero-orbi-trust">
+                    No install · No code · 2 free reviews per month
                   </p>
                 </div>
-                <div className="hero-split-visual">
-                  <HeroReport />
-                </div>
+                <HeroOrbiFeed />
+                <p className="hero-orbi-tagline">
+                  One report. Every issue on your page.
+                </p>
               </div>
             </div>
           </section>
         </div>
 
-        <CompanyLogos />
-
-        <HowItWorks />
+        <OrbiSolutionSection />
 
         <section id="why" className="section-band section-band-soft">
           <div className="container">
@@ -331,79 +202,6 @@ export default function LandingPage() {
                   <h3>{item.title}</h3>
                   <p>{item.body}</p>
                 </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="features" className="section-band">
-          <div className="container">
-            <div className="section-header section-header-left">
-              <SectionEyebrow icon={IconSparkles}>What you get</SectionEyebrow>
-              <h2 className="section-title section-title-left">How it works</h2>
-              <p className="section-lead section-lead-left">
-                No jargon, no setup. Just paste your link and get a clear list of
-                what to fix.
-              </p>
-            </div>
-
-            <div className="feature-showcase-list">
-              {POWER_FEATURES.map((feature, i) => (
-                <AnimateIn key={feature.title} delay={i * 80} className="feature-showcase-wrap">
-                <article
-                  className={`grid feature-showcase${i % 2 === 1 ? " feature-showcase-reverse" : ""}`}
-                >
-                  <div className="feature-showcase-copy">
-                    <IconBadge icon={feature.icon} tone={feature.tone} />
-                    <h3>{feature.title}</h3>
-                    <p>{feature.body}</p>
-                  </div>
-                  <FeatureVisual type={feature.mockType} />
-                </article>
-                </AnimateIn>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="areas" className="section-band section-band-soft">
-          <div className="container">
-            <div className="section-header section-header-left">
-              <SectionEyebrow icon={IconEye}>What we check</SectionEyebrow>
-              <h2 className="section-title section-title-left">
-                What UXAuditX checks on your page
-              </h2>
-              <p className="section-lead section-lead-left">
-                We review your pages the way a first-time visitor would — looking
-                for anything that gets in the way of them signing up, buying, or
-                contacting you.
-              </p>
-            </div>
-            <div className="grid section-grid">
-              {AUDIT_AREAS.map((area) => (
-                <article key={area.title} className={`span-4 card-marketing card-marketing-flat card-marketing-icon card-marketing-icon--${area.tone}`}>
-                  <IconBadge icon={area.icon} tone={area.tone} />
-                  <h3>{area.title}</h3>
-                  <p>{area.body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="examples" className="section-band section-band-soft">
-          <div className="container">
-            <div className="section-header section-header-left">
-              <SectionEyebrow icon={IconReport}>Examples</SectionEyebrow>
-              <h2 className="section-title section-title-left">What you&apos;ll see</h2>
-              <p className="section-lead section-lead-left">
-                Real examples from a report — each one shows the problem, a picture
-                of where it is, and a simple way to fix it.
-              </p>
-            </div>
-            <div className="grid findings-grid section-grid">
-              {SAMPLE_FINDINGS.map((item) => (
-                <ExampleFindingCard key={item.title} finding={item} />
               ))}
             </div>
           </div>

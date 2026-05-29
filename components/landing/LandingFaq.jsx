@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes. The free Starter plan gives you 3 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
+    a: "Yes. The free Starter plan gives you 2 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
   },
   {
     q: "How is this different from a speed test?",

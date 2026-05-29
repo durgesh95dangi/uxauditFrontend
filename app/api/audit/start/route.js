@@ -1,7 +1,11 @@
 // start/route.js - accepts a URL, creates a job, fires the audit pipeline
 
 import { getSupabaseServerClient } from "../../../../lib/supabase/server.js";
-import { createJob } from "../../../../lib/engine/storage/db.js";
+import {
+  getMonthlyAuditLimitForUser
+} from "../../../../lib/audit/plans.js";
+import { monthlyLimitPayload } from "../../../../lib/audit/limits.js";
+import { countUserAuditsThisMonth, createJob } from "../../../../lib/engine/storage/db.js";
 import { runAudit } from "../../../../lib/engine/runner.js";
 import { enqueue } from "../../../../lib/engine/queue/limiter.js";
 import { bootQueue } from "../../../../lib/engine/queue/bootstrap.js";
@@ -64,6 +68,21 @@ export async function POST(request) {
   const validation = normalizeAndValidateUrl(body.url);
   if (validation.error) {
     return jsonResponse({ error: validation.error }, validation.status);
+  }
+
+  let auditsThisMonth;
+  try {
+    auditsThisMonth = await countUserAuditsThisMonth(user.id);
+  } catch (error) {
+    return jsonResponse(
+      { error: error?.message || "Failed to check audit limit" },
+      500
+    );
+  }
+
+  const monthlyLimit = getMonthlyAuditLimitForUser(user);
+  if (monthlyLimit != null && auditsThisMonth >= monthlyLimit) {
+    return jsonResponse(monthlyLimitPayload(auditsThisMonth, monthlyLimit), 429);
   }
 
   let job;

@@ -16,7 +16,7 @@ const PLANS = [
     icon: IconStar,
     tone: "blue",
     features: [
-      "3 reports a month",
+      "2 reports a month",
       "Desktop and phone screenshots",
       "A picture with every issue",
       "Email support"
@@ -39,8 +39,8 @@ const PLANS = [
       "Shareable report links"
     ],
     featured: true,
-    cta: "Get started",
-    href: "/signup"
+    comingSoon: true,
+    cta: "Coming soon"
   },
   {
     name: "Agency",
@@ -56,8 +56,8 @@ const PLANS = [
       "Direct support channel"
     ],
     featured: false,
-    cta: "Email us",
-    href: "mailto:hello@uxauditx.com"
+    comingSoon: true,
+    cta: "Coming soon"
   }
 ];
 
@@ -99,12 +99,22 @@ export default function PricingSection({ withAnchor = true }) {
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-              <Link
-                href={plan.href}
-                className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
-              >
-                {plan.cta}
-              </Link>
+              {plan.comingSoon ? (
+                <button
+                  type="button"
+                  className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
+                  disabled
+                >
+                  {plan.cta}
+                </button>
+              ) : (
+                <Link
+                  href={plan.href}
+                  className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
+                >
+                  {plan.cta}
+                </Link>
+              )}
             </article>
           ))}
         </div>

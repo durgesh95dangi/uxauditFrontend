@@ -2,18 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import AuditQualityPanel from "./AuditQualityPanel.jsx";
+import IssueRow from "./IssueRow.jsx";
 import PageToolbar from "../layout/PageToolbar.jsx";
 import ReportCoverHero from "./ReportCoverHero.jsx";
 import ReportMeta from "./ReportMeta.jsx";
 
 const SEVERITY_RANK = { critical: 0, high: 1, medium: 2, low: 3 };
-
-const SEVERITY_LABEL = {
-  critical: "Critical",
-  high: "High",
-  medium: "Medium",
-  low: "Low"
-};
 
 function sortIssues(issues) {
   return [...(issues || [])].sort((a, b) => {
@@ -68,71 +62,6 @@ function resolveIssueScreenshot(issue, screenshotMap) {
   }
 
   return screenshotMap[label] || null;
-}
-
-function IssueRow({ issue, index, screenshotUrl, onZoom }) {
-  const sev = SEVERITY_RANK[issue.severity] !== undefined ? issue.severity : "low";
-  const viewport =
-    issue.viewport === "mobile"
-      ? "Mobile"
-      : issue.viewport
-        ? "Desktop"
-        : null;
-
-  return (
-    <article className="issue-row">
-      <span className="issue-row-index" aria-hidden="true">
-        {String(index + 1).padStart(2, "0")}
-      </span>
-
-      <div className="issue-row-body">
-        <header className="issue-row-head">
-          <span className={`issue-row-sev issue-row-sev--${sev}`}>
-            {SEVERITY_LABEL[sev] || "Low"}
-          </span>
-          <span className="issue-row-section">{issue.section_label || "Section"}</span>
-          {viewport && <span className="issue-row-vp">{viewport}</span>}
-          {issue.point_id && (
-            <span className="point-id-badge">{issue.point_id}</span>
-          )}
-          {issue.area && (
-            <span className={`area-badge area-badge--${issue.area}`}>
-              {issue.area}
-            </span>
-          )}
-        </header>
-
-        {screenshotUrl && (
-          <button
-            type="button"
-            className="issue-row-shot-button"
-            onClick={() => onZoom(screenshotUrl)}
-            aria-label={`Open screenshot for ${issue.title || "issue"}`}
-          >
-            <img
-              src={screenshotUrl}
-              alt=""
-              className="issue-row-shot"
-              loading="lazy"
-            />
-          </button>
-        )}
-
-        <h3 className="issue-row-title">{issue.title}</h3>
-
-        {issue.description && (
-          <p className="issue-row-desc">{issue.description}</p>
-        )}
-
-        {issue.how_to_fix && (
-          <div className="issue-row-fix">
-            <span className="issue-row-fix-label">Recommended fix</span>
-            <p className="issue-row-fix-text">{issue.how_to_fix}</p>
-          </div>
-        )}
-      </div>
-    </article>
-  );
 }
 
 function SkeletonReport() {

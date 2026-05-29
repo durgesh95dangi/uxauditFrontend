@@ -4,7 +4,7 @@ const FOOTER_COLUMNS = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "/#features" },
+      { label: "Features", href: "/#why" },
       { label: "Pricing", href: "/pricing" },
       { label: "How it works", href: "/how-it-works" },
       { label: "FAQ", href: "/#faq" }
@@ -18,7 +18,9 @@ const FOOTER_COLUMNS = [
         label: "Why isn't my site converting?",
         href: "/why-is-my-website-not-converting"
       },
-      { label: "Usability checklist", href: "/website-usability-checklist" }
+      { label: "Usability checklist", href: "/website-usability-checklist" },
+      { label: "Landing page audit", href: "/landing-page-audit" },
+      { label: "Free website audit tool", href: "/free-website-audit-tool" }
     ]
   },
   {
@@ -26,12 +28,9 @@ const FOOTER_COLUMNS = [
     links: [
       { label: "Sign up", href: "/signup" },
       { label: "Log in", href: "/login" },
-      { label: "Dashboard", href: "/dashboard" }
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "hello@uxauditx.com", href: "mailto:hello@uxauditx.com" }
     ]
-  },
-  {
-    title: "Contact",
-    links: [{ label: "hello@uxauditx.com", href: "mailto:hello@uxauditx.com" }]
   }
 ];
 

@@ -10,11 +10,16 @@ import {
   signUpWithEmail
 } from "./supabaseAuth.js";
 import {
+  countUserAuditsThisMonth,
   createJob,
   getFullReport,
   getJob,
   getRecentJobs
 } from "../../lib/engine/storage/db.js";
+import {
+  getMonthlyAuditLimitForUser
+} from "../../lib/audit/plans.js";
+import { monthlyLimitPayload } from "../../lib/audit/limits.js";
 import { runAudit } from "../../lib/engine/runner.js";
 
 dotenv.config();
@@ -205,6 +210,18 @@ app.post("/audit/start", async (req, res) => {
   const validation = normalizeAndValidateUrl(url);
   if (validation.error) {
     return res.status(validation.status).json({ error: validation.error });
+  }
+
+  let auditsThisMonth;
+  try {
+    auditsThisMonth = await countUserAuditsThisMonth(user.id);
+  } catch (error) {
+    return res.status(500).json({ error: error?.message || "Failed to check audit limit" });
+  }
+
+  const monthlyLimit = getMonthlyAuditLimitForUser(user);
+  if (monthlyLimit != null && auditsThisMonth >= monthlyLimit) {
+    return res.status(429).json(monthlyLimitPayload(auditsThisMonth, monthlyLimit));
   }
 
   let job;

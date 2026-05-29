@@ -6,7 +6,7 @@ import { createPageMetadata } from "../../lib/metadata.js";
 export const metadata = createPageMetadata({
   title: "Pricing — Free, Pro & Agency Plans",
   description:
-    "Start free with 3 audits per month. Upgrade to Pro for unlimited reports and shareable links. No credit card needed.",
+    "Start free with 2 audits per month. Upgrade to Pro for unlimited reports and shareable links. No credit card needed.",
   path: "/pricing"
 });
 

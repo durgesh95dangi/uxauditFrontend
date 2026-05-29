@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MONTHLY_AUDIT_LIMIT } from "../../lib/audit/limits.js";
 import { DEMO_SITE } from "../../lib/landing/demoSite.js";
 
 const AUDIT_CHECKS = [
@@ -69,8 +70,8 @@ export default function AuditInput({ onJobStart }) {
         <h1 className="dashboard-panel-title audit-input-heading">Run an audit</h1>
       </header>
       <p className="dashboard-panel-sub audit-input-sub">
-        Public URL in, screenshot-backed report out. Most jobs finish in under a
-        minute.
+        Free Starter plan — {MONTHLY_AUDIT_LIMIT} audits per month. Most jobs
+        finish in under a minute.
       </p>
 
       <form onSubmit={handleSubmit} className="audit-input-form" noValidate>
