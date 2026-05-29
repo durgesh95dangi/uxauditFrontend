@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220" fill="none">
+  <rect width="400" height="220" rx="8" fill="#0a0a0a"/>
+  <rect x="1" y="1" width="398" height="218" rx="7" stroke="rgba(255,255,255,0.08)"/>
+  <text x="12" y="18" fill="#737373" font-family="ui-monospace, monospace" font-size="9">1440px � Footer � yourwebsite.com</text>
+  <rect x="12" y="28" width="376" height="180" rx="6" fill="#141414" stroke="rgba(255,255,255,0.06)"/>
+  <rect x="24" y="120" width="352" height="1" fill="rgba(255,255,255,0.08)"/>
+  <rect x="24" y="136" width="80" height="8" rx="2" fill="#525252"/>
+  <rect x="120" y="138" width="56" height="6" rx="2" fill="#404040"/>
+  <rect x="188" y="138" width="48" height="6" rx="2" fill="#404040"/>
+  <!-- missing privacy link -->
+  <rect x="260" y="132" width="72" height="18" rx="4" fill="rgba(96,165,250,0.1)" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="268" y="144" fill="#60a5fa" font-family="ui-monospace, monospace" font-size="8">privacy?</text>
+  <circle cx="332" cy="130" r="7" fill="#60a5fa" stroke="#0a0a0a" stroke-width="2"/>
+  <text x="329" y="133" fill="#0a0a0a" font-size="9" font-weight="700">?</text>
+  <rect x="24" y="160" width="120" height="6" rx="2" fill="#333"/>
+</svg>

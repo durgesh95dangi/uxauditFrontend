@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | UXAuditX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/tailwind.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <a class="brand" href="/dashboard.html">UXAuditX</a>
+        <button id="new-audit-btn" class="btn btn-primary sidebar-cta" type="button">
+          + New Audit
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <button class="nav-item active" data-view="audit">
+          <span class="nav-dot"></span>
+          New Audit
+        </button>
+        <button class="nav-item" data-view="history">
+          <span class="nav-dot"></span>
+          History
+        </button>
+        <button class="nav-item" data-view="settings">
+          <span class="nav-dot"></span>
+          Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="user-chip">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <div class="user-meta">
+            <div class="user-name" id="user-email">Loading...</div>
+            <div class="user-sub">Signed in</div>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn btn-ghost btn-block" type="button">
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="app-header">
+        <div>
+          <h1 class="app-title" id="page-title">New Audit</h1>
+          <p class="app-sub" id="page-sub">Paste a URL to run a complete UX audit.</p>
+        </div>
+      </header>
+
+      <main class="app-content">
+        <!-- VIEW: AUDIT INPUT -->
+        <section id="view-audit" class="view active">
+          <div class="audit-card card">
+            <h2>Audit a website</h2>
+            <p class="subtitle">
+              Enter any public URL. We will scan it like a real visitor and surface
+              specific UX issues with screenshots and fixes.
+            </p>
+            <form id="audit-form" class="audit-form">
+              <input
+                id="audit-url"
+                type="text"
+                placeholder="https://yourwebsite.com"
+                required
+              />
+              <button type="submit" class="btn btn-primary">Analyze UX</button>
+            </form>
+            <p id="audit-input-error" class="auth-result error" hidden></p>
+          </div>
+
+          <div class="audit-tips card">
+            <h3>What we look for</h3>
+            <ul class="feature-list">
+              <li>Visual hierarchy and CTA clarity</li>
+              <li>Copy strength and value proposition</li>
+              <li>Trust signals and social proof</li>
+              <li>Mobile responsiveness and tap targets</li>
+              <li>Cognitive load, spacing, and layout breaks</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- VIEW: PROGRESS -->
+        <section id="view-progress" class="view">
+          <div class="progress-card card">
+            <p class="eyebrow">Audit in progress</p>
+            <h2 id="progress-url">Analyzing...</h2>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+            <p class="progress-stage" id="progress-stage">Setting up browser...</p>
+
+            <ol class="progress-steps" id="progress-steps">
+              <li data-step="setup">Setting up browser</li>
+              <li data-step="capture">Capturing screenshots</li>
+              <li data-step="analyze">Analyzing with AI</li>
+              <li data-step="report">Generating report</li>
+            </ol>
+
+            <p id="progress-error" class="auth-result error" hidden></p>
+          </div>
+        </section>
+
+        <!-- VIEW: REPORT -->
+        <section id="view-report" class="view">
+          <div id="report-container"></div>
+        </section>
+
+        <!-- VIEW: HISTORY -->
+        <section id="view-history" class="view">
+          <div class="card">
+            <div class="history-header">
+              <h2>Recent audits</h2>
+              <button class="btn btn-ghost" id="refresh-history" type="button">Refresh</button>
+            </div>
+            <div id="history-list" class="history-list">
+              <p class="muted">Loading history...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW: SETTINGS -->
+        <section id="view-settings" class="view">
+          <div class="card">
+            <h2>Account</h2>
+            <p class="muted">Email</p>
+            <p id="settings-email" class="settings-row">-</p>
+            <p class="muted">User ID</p>
+            <p id="settings-id" class="settings-row mono">-</p>
+            <p class="muted">Last sign in</p>
+            <p id="settings-signin" class="settings-row">-</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:4000";
+      const TOKEN_KEY = "uxauditx_access_token";
+      const POLL_INTERVAL = 3000;
+
+      const SEVERITY_STYLES = {
+        critical: { label: "Critical", className: "sev sev-critical" },
+        high: { label: "High", className: "sev sev-high" },
+        medium: { label: "Medium", className: "sev sev-medium" },
+        low: { label: "Low", className: "sev sev-low" }
+      };
+
+      let token = localStorage.getItem(TOKEN_KEY);
+      let currentUser = null;
+      let activePoll = null;
+
+      function authHeaders() {
+        return {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        };
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function setView(view) {
+        document.querySelectorAll(".view").forEach((el) => el.classList.remove("active"));
+        const target = document.getElementById(`view-${view}`);
+        if (target) target.classList.add("active");
+
+        document.querySelectorAll(".nav-item").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.view === view);
+        });
+
+        const titles = {
+          audit: ["New Audit", "Paste a URL to run a complete UX audit."],
+          progress: ["Audit in progress", "Stay on this page — your report is being built."],
+          report: ["Audit report", "Findings, screenshots, and recommended fixes."],
+          history: ["History", "All your previous audits."],
+          settings: ["Settings", "Account details."]
+        };
+        const [title, sub] = titles[view] || ["Dashboard", ""];
+        document.getElementById("page-title").textContent = title;
+        document.getElementById("page-sub").textContent = sub;
+      }
+
+      function logout() {
+        if (token) {
+          fetch(`${API_BASE}/logout`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` }
+          }).catch(() => {});
+        }
+        localStorage.removeItem(TOKEN_KEY);
+        window.location.href = "/login.html";
+      }
+
+      async function loadUser() {
+        if (!token) {
+          window.location.href = "/login.html";
+          return null;
+        }
+
+        try {
+          const res = await fetch(`${API_BASE}/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const json = await res.json();
+          if (!res.ok || !json.user) throw new Error(json.error || "Session invalid");
+          currentUser = json.user;
+
+          const email = currentUser.email || "Unknown";
+          document.getElementById("user-email").textContent = email;
+          document.getElementById("user-avatar").textContent =
+            (email[0] || "?").toUpperCase();
+          document.getElementById("settings-email").textContent = email;
+          document.getElementById("settings-id").textContent = currentUser.id || "-";
+          document.getElementById("settings-signin").textContent =
+            currentUser.last_sign_in_at || "-";
+        } catch {
+          localStorage.removeItem(TOKEN_KEY);
+          window.location.href = "/login.html";
+          return null;
+        }
+
+        return currentUser;
+      }
+
+      function showInputError(message) {
+        const el = document.getElementById("audit-input-error");
+        el.textContent = message;
+        el.hidden = !message;
+      }
+
+      function showProgressError(message) {
+        const el = document.getElementById("progress-error");
+        el.textContent = message;
+        el.hidden = !message;
+      }
+
+      function setProgressStage(activeKey, percent) {
+        const stages = {
+          setup: "Setting up browser...",
+          capture: "Capturing screenshots...",
+          analyze: "Analyzing with AI...",
+          report: "Generating report..."
+        };
+        document.getElementById("progress-stage").textContent =
+          stages[activeKey] || "Working...";
+
+        const order = ["setup", "capture", "analyze", "report"];
+        const activeIdx = order.indexOf(activeKey);
+        document.querySelectorAll("#progress-steps li").forEach((li) => {
+          const step = li.dataset.step;
+          const idx = order.indexOf(step);
+          li.classList.toggle("done", idx < activeIdx);
+          li.classList.toggle("active", idx === activeIdx);
+        });
+
+        document.getElementById("progress-bar-fill").style.width = `${percent}%`;
+      }
+
+      function stageFromElapsed(elapsedSec) {
+        if (elapsedSec < 15) return { key: "setup", pct: 15 };
+        if (elapsedSec < 40) return { key: "capture", pct: 45 };
+        if (elapsedSec < 80) return { key: "analyze", pct: 75 };
+        return { key: "report", pct: 92 };
+      }
+
+      function stopPolling() {
+        if (activePoll) {
+          clearInterval(activePoll.interval);
+          activePoll = null;
+        }
+      }
+
+      async function startAudit(rawUrl) {
+        showInputError("");
+        try {
+          const res = await fetch(`${API_BASE}/audit/start`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify({ url: rawUrl })
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || "Could not start audit");
+          startPolling(json.jobId, rawUrl);
+        } catch (error) {
+          showInputError(error.message);
+        }
+      }
+
+      function startPolling(jobId, displayUrl) {
+        setView("progress");
+        document.getElementById("progress-url").textContent =
+          displayUrl || "Analyzing...";
+        showProgressError("");
+        setProgressStage("setup", 5);
+
+        const startedAt = Date.now();
+
+        const tick = async () => {
+          const elapsedSec = (Date.now() - startedAt) / 1000;
+          const { key, pct } = stageFromElapsed(elapsedSec);
+          setProgressStage(key, pct);
+
+          try {
+            const res = await fetch(`${API_BASE}/audit/status/${jobId}`, {
+              headers: authHeaders()
+            });
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.error || "Could not load status");
+
+            if (json.status === "done") {
+              setProgressStage("report", 100);
+              stopPolling();
+              setTimeout(() => loadReport(jobId), 400);
+              return;
+            }
+            if (json.status === "failed") {
+              stopPolling();
+              showProgressError(json.error || "Audit failed");
+              return;
+            }
+          } catch (error) {
+            showProgressError(error.message);
+          }
+        };
+
+        tick();
+        activePoll = { jobId, interval: setInterval(tick, POLL_INTERVAL) };
+      }
+
+      async function loadReport(jobId) {
+        setView("report");
+        const container = document.getElementById("report-container");
+        container.innerHTML = '<div class="card"><p class="muted">Loading report...</p></div>';
+
+        try {
+          const res = await fetch(`${API_BASE}/audit/report/${jobId}`, {
+            headers: authHeaders()
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || "Could not load report");
+          renderReport(container, json);
+        } catch (error) {
+          container.innerHTML = `<div class="card"><p class="auth-result error">${escapeHtml(error.message)}</p></div>`;
+        }
+      }
+
+      function severityBadge(severity) {
+        const config = SEVERITY_STYLES[severity] || SEVERITY_STYLES.low;
+        return `<span class="${config.className}">${config.label}</span>`;
+      }
+
+      function renderReport(container, report) {
+        const { job, summary, issues, screenshots } = report || {};
+        if (!job) {
+          container.innerHTML = '<div class="card"><p>No report data.</p></div>';
+          return;
+        }
+
+        const issuesBySection = issues || {};
+        const sectionOrder = Object.keys(issuesBySection);
+
+        const screenshotByLabel = {};
+        (screenshots || []).forEach((s) => {
+          if (s.viewport === "desktop" && s.type === "section") {
+            screenshotByLabel[s.label] = s.public_url;
+          }
+        });
+
+        const sectionNav = sectionOrder
+          .map((label) => {
+            const count = issuesBySection[label]?.length || 0;
+            const slug = `sec-${label.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
+            return `
+              <a class="report-nav-item" href="#${slug}">
+                <span>${escapeHtml(label)}</span>
+                <span class="badge">${count}</span>
+              </a>
+            `;
+          })
+          .join("");
+
+        const sectionBlocks = sectionOrder
+          .map((label) => {
+            const items = issuesBySection[label] || [];
+            const slug = `sec-${label.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
+            const image = screenshotByLabel[label];
+            const issuesHtml = items
+              .map(
+                (issue) => `
+                <article class="issue-card">
+                  <header class="issue-head">
+                    ${severityBadge(issue.severity)}
+                    <span class="tag tag-cat">${escapeHtml(issue.category || "general")}</span>
+                    <h4>${escapeHtml(issue.title)}</h4>
+                  </header>
+                  <p class="issue-desc">${escapeHtml(issue.description || "")}</p>
+                  <details class="issue-details">
+                    <summary>Details</summary>
+                    <p><strong>Why:</strong> ${escapeHtml(issue.why || "")}</p>
+                    <p><strong>Business impact:</strong> ${escapeHtml(issue.business_impact || "")}</p>
+                    <p><strong>How to fix:</strong> ${escapeHtml(issue.how_to_fix || "")}</p>
+                    <p><strong>Effort:</strong> <span class="tag tag-effort">${escapeHtml(issue.effort || "-")}</span></p>
+                  </details>
+                </article>
+              `
+              )
+              .join("");
+
+            return `
+              <section id="${slug}" class="report-section">
+                <header class="report-section-head">
+                  <h3>${escapeHtml(label)}</h3>
+                  <span class="badge">${items.length} ${items.length === 1 ? "issue" : "issues"}</span>
+                </header>
+                ${image ? `<img class="report-shot" src="${escapeHtml(image)}" alt="${escapeHtml(label)} screenshot" loading="lazy" />` : ""}
+                <div class="issue-list">
+                  ${issuesHtml || '<p class="muted">No issues found in this section.</p>'}
+                </div>
+              </section>
+            `;
+          })
+          .join("");
+
+        container.innerHTML = `
+          <div class="report-summary card">
+            <div>
+              <p class="eyebrow">Report for</p>
+              <a class="report-url" href="${escapeHtml(job.url)}" target="_blank" rel="noopener">${escapeHtml(job.url)}</a>
+            </div>
+            <div class="summary-stats">
+              <div class="stat"><span class="stat-num">${summary?.totalIssues ?? 0}</span><span class="stat-label">Total issues</span></div>
+              <div class="stat sev-critical-bg"><span class="stat-num">${summary?.critical ?? 0}</span><span class="stat-label">Critical</span></div>
+              <div class="stat sev-high-bg"><span class="stat-num">${summary?.high ?? 0}</span><span class="stat-label">High</span></div>
+              <div class="stat sev-medium-bg"><span class="stat-num">${summary?.medium ?? 0}</span><span class="stat-label">Medium</span></div>
+              <div class="stat sev-low-bg"><span class="stat-num">${summary?.low ?? 0}</span><span class="stat-label">Low</span></div>
+              <div class="stat"><span class="stat-num">${summary?.sectionsAnalyzed ?? 0}</span><span class="stat-label">Sections</span></div>
+            </div>
+            <button id="back-to-input" class="btn btn-primary" type="button">+ New Audit</button>
+          </div>
+
+          <div class="report-grid">
+            <aside class="report-nav card">
+              <h4>Sections</h4>
+              ${sectionNav || '<p class="muted">No sections found.</p>'}
+            </aside>
+            <div class="report-body">
+              ${sectionBlocks || '<div class="card"><p class="muted">No findings to display.</p></div>'}
+            </div>
+          </div>
+        `;
+
+        document.getElementById("back-to-input").addEventListener("click", () => {
+          document.getElementById("audit-url").value = "";
+          setView("audit");
+        });
+      }
+
+      async function loadHistory() {
+        const list = document.getElementById("history-list");
+        list.innerHTML = '<p class="muted">Loading history...</p>';
+
+        try {
+          const res = await fetch(`${API_BASE}/audit/recent?limit=20`, {
+            headers: authHeaders()
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || "Could not load history");
+
+          const jobs = json.jobs || [];
+          if (jobs.length === 0) {
+            list.innerHTML = '<p class="muted">No audits yet. Run your first audit from "New Audit".</p>';
+            return;
+          }
+
+          list.innerHTML = `
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>URL</th>
+                  <th>Status</th>
+                  <th>Issues</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${jobs
+                  .map((job) => {
+                    const created = job.created_at
+                      ? new Date(job.created_at).toLocaleString()
+                      : "-";
+                    const safeUrl = escapeHtml(job.url);
+                    const status = escapeHtml(job.status);
+                    const canView = job.status === "done";
+                    return `
+                      <tr>
+                        <td class="truncate" title="${safeUrl}">${safeUrl}</td>
+                        <td><span class="status-${status}">${status}</span></td>
+                        <td>${job.issue_count ?? 0}</td>
+                        <td>${escapeHtml(created)}</td>
+                        <td>
+                          ${
+                            canView
+                              ? `<button class="btn btn-ghost btn-sm" data-job="${job.id}">View</button>`
+                              : `<span class="muted">—</span>`
+                          }
+                        </td>
+                      </tr>
+                    `;
+                  })
+                  .join("")}
+              </tbody>
+            </table>
+          `;
+
+          list.querySelectorAll("button[data-job]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              loadReport(btn.dataset.job);
+            });
+          });
+        } catch (error) {
+          list.innerHTML = `<p class="auth-result error">${escapeHtml(error.message)}</p>`;
+        }
+      }
+
+      document.getElementById("audit-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const url = document.getElementById("audit-url").value.trim();
+        if (!url) {
+          showInputError("Please enter a URL");
+          return;
+        }
+        startAudit(url);
+      });
+
+      document.getElementById("new-audit-btn").addEventListener("click", () => {
+        stopPolling();
+        document.getElementById("audit-url").value = "";
+        showInputError("");
+        setView("audit");
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", logout);
+
+      document.getElementById("refresh-history").addEventListener("click", loadHistory);
+
+      document.querySelectorAll(".nav-item").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const view = btn.dataset.view;
+          if (view === "history") {
+            setView("history");
+            loadHistory();
+          } else {
+            setView(view);
+          }
+        });
+      });
+
+      (async () => {
+        const user = await loadUser();
+        if (!user) return;
+        setView("audit");
+      })();
+    </script>
+  </body>
+</html>

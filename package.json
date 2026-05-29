@@ -1,0 +1,45 @@
+{
+  "name": "uxauditx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UXAuditX - automated UX audit SaaS",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "postbuild": "next-sitemap",
+    "start": "next start",
+    "legacy-start": "npm run build:css && node src/index.js",
+    "legacy-auth-api": "node src/auth/server.js",
+    "auth-api": "node src/auth/server.js",
+    "test": "node src/test.js",
+    "setup-db": "node src/storage/setupDB.js",
+    "verify": "node src/storage/verify.js",
+    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./public/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/tailwind.css -o ./public/tailwind.css --watch"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.99.0",
+    "@aws-sdk/client-s3": "^3.1055.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.5",
+    "geist": "^1.7.1",
+    "next": "^16.2.6",
+    "next-sitemap": "^4.2.3",
+    "p-limit": "^7.3.0",
+    "playwright": "^1.60.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sharp": "^0.34.5",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0"
+  }
+}

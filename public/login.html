@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | UXAuditX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/tailwind.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="auth-page">
+    <div class="bg-grid"></div>
+    <header class="nav">
+      <a class="brand" href="/">UXAuditX</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/signup.html">Signup</a>
+      </nav>
+    </header>
+
+    <main class="auth-main">
+      <section class="auth-shell card">
+        <h1>Welcome back</h1>
+        <p class="subtitle">Login to continue to your UXAuditX dashboard.</p>
+        <form id="login-form" class="contact-form auth-form">
+          <label>
+            Email
+            <input id="login-email" type="email" placeholder="you@company.com" required />
+          </label>
+          <label>
+            Password
+            <input id="login-password" type="password" placeholder="Your password" required />
+          </label>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p class="auth-helper">
+          <a href="/forgot-password.html">Forgot password?</a>
+          <span class="auth-helper-sep">·</span>
+          <a href="/signup.html">Create account</a>
+        </p>
+        <p id="login-result" class="auth-result">No login request yet.</p>
+      </section>
+    </main>
+
+    <script>
+      const AUTH_API_BASE = "http://localhost:4000";
+      const DASHBOARD_PATH = "/dashboard.html";
+      async function redirectIfAuthenticated() {
+        const token = localStorage.getItem("uxauditx_access_token");
+        if (!token) return;
+
+        try {
+          const response = await fetch(`${AUTH_API_BASE}/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (!response.ok) {
+            localStorage.removeItem("uxauditx_access_token");
+            return;
+          }
+
+          const result = await response.json();
+          if (result.user) {
+            window.location.href = DASHBOARD_PATH;
+          }
+        } catch {
+          // Stay on login page when auth API is unavailable.
+        }
+      }
+
+      redirectIfAuthenticated();
+
+      function setResult(message, isError = false) {
+        const el = document.getElementById("login-result");
+        el.textContent = message;
+        el.classList.toggle("error", isError);
+        el.classList.toggle("success", !isError);
+      }
+
+      document.getElementById("login-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+
+        try {
+          const response = await fetch(`${AUTH_API_BASE}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.error || "Login failed");
+          }
+
+          if (!result.session?.access_token) {
+            throw new Error("Login succeeded but no session token returned.");
+          }
+
+          localStorage.setItem("uxauditx_access_token", result.session.access_token);
+          window.location.href = DASHBOARD_PATH;
+        } catch (error) {
+          setResult(error.message, true);
+        }
+      });
+    </script>
+  </body>
+</html>

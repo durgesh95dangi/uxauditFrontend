@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220" fill="none">
+  <rect width="400" height="220" rx="8" fill="#0a0a0a"/>
+  <rect x="1" y="1" width="398" height="218" rx="7" stroke="rgba(255,255,255,0.08)"/>
+  <text x="12" y="18" fill="#737373" font-family="ui-monospace, monospace" font-size="9">390px � Hero � yourwebsite.com</text>
+  <rect x="12" y="28" width="376" height="180" rx="6" fill="#141414" stroke="rgba(255,255,255,0.06)"/>
+  <rect x="24" y="44" width="140" height="10" rx="2" fill="#ededed" opacity="0.9"/>
+  <rect x="24" y="62" width="220" height="7" rx="2" fill="#737373"/>
+  <rect x="24" y="76" width="180" height="7" rx="2" fill="#525252"/>
+  <!-- low contrast CTA problem -->
+  <rect x="24" y="98" width="112" height="34" rx="6" fill="rgba(52,211,153,0.12)" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <rect x="32" y="108" width="96" height="14" rx="3" fill="#1f2937" opacity="0.9"/>
+  <circle cx="80" cy="96" r="7" fill="#f87171" stroke="#0a0a0a" stroke-width="2"/>
+  <text x="77" y="99" fill="#0a0a0a" font-size="9" font-weight="700">!</text>
+  <rect x="24" y="148" width="160" height="6" rx="2" fill="#404040"/>
+  <rect x="24" y="162" width="120" height="6" rx="2" fill="#333"/>
+</svg>
