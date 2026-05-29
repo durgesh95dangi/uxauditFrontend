@@ -21,6 +21,14 @@ export const metadata = {
     title: SITE_NAME,
     description:
       "Find what's stopping your visitors from buying. Complete UX audit in under a minute with visual proof and step-by-step fixes."
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true
+    }
   }
 };
 export const viewport = {

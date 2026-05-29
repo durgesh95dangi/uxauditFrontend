@@ -7,8 +7,7 @@ export async function generateMetadata({ params }) {
   return createPageMetadata({
     title: "Audit Report",
     description: `Admin view for audit report ${jobId}.`,
-    path: `/admin/report/${jobId}`,
-    noIndex: true
+    path: `/admin/report/${jobId}`
   });
 }
 

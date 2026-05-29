@@ -7,8 +7,7 @@ export async function generateMetadata({ params }) {
   return createPageMetadata({
     title: "User Details",
     description: `Admin view for user ${userId}.`,
-    path: `/admin/users/${userId}`,
-    noIndex: true
+    path: `/admin/users/${userId}`
   });
 }
 

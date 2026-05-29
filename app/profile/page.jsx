@@ -7,8 +7,7 @@ import ProfileClient from "./ProfileClient.jsx";
 export const metadata = createPageMetadata({
   title: "Profile",
   description: "Manage your UXAuditX account settings and profile details.",
-  path: "/profile",
-  noIndex: true
+  path: "/profile"
 });
 
 export const dynamic = "force-dynamic";

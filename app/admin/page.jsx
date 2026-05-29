@@ -4,8 +4,7 @@ import { createPageMetadata } from "../../lib/metadata.js";
 export const metadata = createPageMetadata({
   title: "Admin",
   description: "UXAuditX admin area.",
-  path: "/admin",
-  noIndex: true
+  path: "/admin"
 });
 
 export default function AdminIndexPage() {

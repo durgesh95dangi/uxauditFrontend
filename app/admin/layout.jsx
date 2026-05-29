@@ -7,8 +7,7 @@ import AdminShell from "./AdminShell.jsx";
 export const metadata = createPageMetadata({
   title: "Admin",
   description: "UXAuditX admin area.",
-  path: "/admin",
-  noIndex: true
+  path: "/admin"
 });
 
 export const dynamic = "force-dynamic";

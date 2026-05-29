@@ -7,8 +7,7 @@ import DashboardClient from "./DashboardClient.jsx";
 export const metadata = createPageMetadata({
   title: "Dashboard",
   description: "Run website audits, track progress, and view your UX reports.",
-  path: "/dashboard",
-  noIndex: true
+  path: "/dashboard"
 });
 
 export const dynamic = "force-dynamic";
