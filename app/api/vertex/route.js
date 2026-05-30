@@ -3,6 +3,7 @@ import { requireSuperadminApi } from "../../../lib/auth/requireSuperadmin.js";
 import {
   getVertexAI,
   getVertexLocation,
+  getVertexModel,
   getVertexStatus,
   isVertexConfigured
 } from "../../../lib/vertex/client.js";
@@ -79,12 +80,12 @@ export async function POST(request) {
     }
 
     const vertexAI = getVertexAI();
-    const modelName =
+    const model =
       typeof body.model === "string" && body.model.trim()
         ? body.model.trim()
-        : process.env.VERTEX_MODEL?.trim() || "gemini-1.5-flash";
+        : getVertexModel("fast");
 
-    const generativeModel = vertexAI.getGenerativeModel({ model: modelName });
+    const generativeModel = vertexAI.getGenerativeModel({ model });
 
     const result = await generativeModel.generateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }]
@@ -100,7 +101,7 @@ export async function POST(request) {
     return NextResponse.json({
       ok: true,
       text: responseText,
-      model: modelName,
+      model,
       location: getVertexLocation()
     });
   } catch (error) {
