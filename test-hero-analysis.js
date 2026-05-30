@@ -45,7 +45,7 @@ if (!heroCapture.buffer) {
   process.exit(1);
 }
 
-console.log("Screenshot captured, sending to Claude...");
+console.log("Screenshot captured, sending to LLM for analysis...");
 
 const analysis = await analyzeSection(
   heroCapture.buffer,

@@ -7,7 +7,7 @@ import { IconCheck, IconReport, IconScan, IconZap } from "./LandingIcons.jsx";
 const REVIEW_STEPS = [
   "Opening page in browser",
   "Scrolling and capturing sections",
-  "Analyzing with Claude Vision",
+  "Analyzing screenshots",
   "Saving your report"
 ];
 
