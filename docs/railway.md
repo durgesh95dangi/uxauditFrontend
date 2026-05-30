@@ -40,6 +40,8 @@ If you still see Nixpacks or a custom build command like `playwright install`, s
 | `ANTHROPIC_API_KEY` | Runtime |
 | Paddle `NEXT_PUBLIC_*` + server keys | Build + runtime (for pricing checkout) |
 | `ANTHROPIC_MODEL` / `ANTHROPIC_MODEL_FAST` | Runtime |
+| **Gemini via Vertex AI** (recommended): `LLM_PROVIDER=gemini`, `GEMINI_USE_VERTEX=true`, `GCP_PROJECT_ID`, `GCP_LOCATION`, `GCP_CLIENT_EMAIL`, `GCP_PRIVATE_KEY` (or `GCP_PRIVATE_KEY_BASE64`) | Runtime |
+| Optional: `VERTEX_API_SECRET` — protects `/api/vertex` in production | Runtime |
 | R2: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL` | Runtime |
 | Optional: `MAX_CONCURRENT_AUDITS=2` | Runtime |
 
@@ -72,9 +74,35 @@ Build logs should show Docker steps (`FROM mcr.microsoft.com/playwright:v1.60.0-
 
 ## 7. Verify audits
 
-1. Open your Railway URL (or custom domain)
+1. Open **https://uxauditx.com** (or your Railway custom domain)
 2. Sign in → run an audit
 3. If it still fails, open **Deployments → View logs** and search for `playwright` or `Capture failed`
+
+### Verify Vertex AI (Gemini)
+
+After setting `LLM_PROVIDER=gemini`, `GEMINI_USE_VERTEX=true`, and GCP service account vars:
+
+**Health check** (superadmin session, or `VERTEX_API_SECRET`):
+
+```bash
+curl -s https://uxauditx.com/api/vertex \
+  -H "Authorization: Bearer YOUR_VERTEX_API_SECRET"
+```
+
+Expected: JSON with `"configured": true` and model IDs.
+
+**Smoke test**:
+
+```bash
+curl -s -X POST https://uxauditx.com/api/vertex \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_VERTEX_API_SECRET" \
+  -d "{\"prompt\":\"Reply with exactly: Vertex OK\"}"
+```
+
+Expected: `"ok": true` and `"text"` containing a response.
+
+**Railway tip for `GCP_PRIVATE_KEY`:** use one line with `\n` between PEM lines, or set `GCP_PRIVATE_KEY_BASE64` to the base64-encoded PEM file contents instead.
 
 ---
 
