@@ -8987,6 +8987,36 @@ label.profile-row-label {
   gap: var(--space-md);
 }
 
+.admin-audit-panel {
+  max-width: 720px;
+}
+
+.admin-audit-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.admin-audit-option input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.admin-audit-option-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-mute);
+}
+
 .admin-section-title {
   margin: 0;
   font-size: 16px;

@@ -8,6 +8,7 @@ import BrandLogo from "../layout/BrandLogo.jsx";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard" },
+  { href: "/admin/audit", label: "Run audit" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/reports", label: "Reports" }
 ];
