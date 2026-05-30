@@ -6,7 +6,7 @@ import BrandLogo from "./BrandLogo.jsx";
 import UserNavMenu from "./UserNavMenu.jsx";
 import AdminMenuToggle from "../admin/AdminMenuToggle.jsx";
 
-const MOBILE_QUERY = "(max-width: 960px)";
+const TABLET_MOBILE_QUERY = "(max-width: 1024px)";
 
 const PUBLIC_NAV_LINKS = [
   { href: "/#why", label: "Features" },
@@ -34,10 +34,10 @@ export default function SiteNav({
   fullWidth = false
 }) {
   const logoHref = brandHref || (user ? "/dashboard" : "/");
-  const [isMobile, setIsMobile] = useState(false);
+  const [isCompactNav, setIsCompactNav] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const showSiteMobileMenu = isMobile && !showMenuButton;
+  const showSiteNavMenu = !showMenuButton;
   const drawerLinks = user
     ? user.isSuperadmin
       ? AUTHED_NAV_LINKS.filter((link) => link.href !== "/profile")
@@ -46,9 +46,9 @@ export default function SiteNav({
   const showDesktopLinks = !user && !minimal;
 
   useEffect(() => {
-    const media = window.matchMedia(MOBILE_QUERY);
+    const media = window.matchMedia(TABLET_MOBILE_QUERY);
     const sync = () => {
-      setIsMobile(media.matches);
+      setIsCompactNav(media.matches);
       if (!media.matches) {
         setMobileMenuOpen(false);
       }
@@ -102,7 +102,7 @@ export default function SiteNav({
             hideBrand || showMenuButton ? " nav-bar-inner--no-brand" : ""
           }${showMenuButton ? " nav-bar-inner--with-menu" : ""}${
             fullWidth ? " nav-bar-inner--full-width" : ""
-          }${showSiteMobileMenu ? " nav-bar-inner--mobile" : ""}`}
+          }${showSiteNavMenu ? " nav-bar-inner--site" : ""}`}
         >
           {showMenuButton && (
             <button
@@ -116,7 +116,7 @@ export default function SiteNav({
             </button>
           )}
 
-          {showSiteMobileMenu && (
+          {showSiteNavMenu && (
             <button
               type="button"
               className="nav-mobile-toggle btn btn-ghost btn-sm"
@@ -163,7 +163,7 @@ export default function SiteNav({
         </div>
       </header>
 
-      {showSiteMobileMenu && mobileMenuOpen && (
+      {showSiteNavMenu && isCompactNav && mobileMenuOpen && (
         <>
           <button
             type="button"

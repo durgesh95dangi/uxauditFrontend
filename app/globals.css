@@ -1094,6 +1094,54 @@ p { margin: 0; }
   color: var(--color-error);
 }
 
+/* Site nav — tablet + mobile hamburger (≤1024px) */
+@media (max-width: 1024px) {
+  .nav-bar-inner--site {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .nav-bar-inner--site .nav-brand {
+    grid-column: unset;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-bar-inner--site .nav-actions {
+    grid-column: unset;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .nav-bar-inner--site .nav-links {
+    display: none;
+  }
+
+  .nav-bar-inner--site .nav-actions-guest {
+    display: none;
+  }
+
+  .nav-bar-inner--site .nav-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .nav-bar-inner--site .nav-user-name {
+    display: none;
+  }
+
+  .nav-bar-inner--site .nav-user-trigger {
+    padding-right: 8px;
+  }
+}
+
 /* =============================================================
    Hero + Mesh gradient
    ============================================================= */
@@ -7724,33 +7772,6 @@ label.profile-row-label {
   .feature-grid { grid-template-columns: 1fr; }
   .showcase-band-dark-inner { grid-template-columns: 1fr; }
   .site-footer-grid { grid-template-columns: repeat(2, 1fr); }
-  .nav-links { display: none; }
-  .nav-actions-guest { display: none; }
-  .nav-mobile-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    flex-shrink: 0;
-  }
-  .nav-bar-inner--mobile {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: var(--space-sm);
-  }
-  .nav-bar-inner--mobile .nav-brand {
-    grid-column: unset;
-    flex: 1;
-    min-width: 0;
-  }
-  .nav-bar-inner--mobile .nav-actions {
-    grid-column: unset;
-    flex-shrink: 0;
-    margin-left: auto;
-  }
   .nav-user-name { display: none; }
   .nav-user-trigger { padding-right: 8px; }
   .report-grid { grid-template-columns: 1fr; }
