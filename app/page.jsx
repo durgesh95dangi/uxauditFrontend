@@ -1,5 +1,6 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
+import { FREE_MONTHLY_AUDIT_LIMIT } from "../lib/audit/plans.js";
 import SiteNav from "../components/layout/SiteNav.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import HeroOrbiFeed from "../components/landing/HeroOrbiFeed.jsx";
@@ -22,9 +23,11 @@ import {
 } from "../components/landing/LandingIcons.jsx";
 import { createAbsoluteTitleMetadata, SITE_URL } from "../lib/metadata.js";
 
-const LandingFaq = dynamic(() => import("../components/landing/LandingFaq.jsx"), {
+const LandingFaq = nextDynamic(() => import("../components/landing/LandingFaq.jsx"), {
   ssr: true
 });
+
+export const dynamic = "force-dynamic";
 
 export const metadata = createAbsoluteTitleMetadata({
   title: "Free Website UX Audit Tool — Find What's Losing You Customers | UXAuditX",
@@ -170,7 +173,8 @@ export default function LandingPage() {
                     </Link>
                   </div>
                   <p className="hero-orbi-trust">
-                    No install · No code · 2 free reviews per month
+                    No install · No code · {FREE_MONTHLY_AUDIT_LIMIT} free audit
+                    per month
                   </p>
                 </div>
                 <HeroOrbiFeed />

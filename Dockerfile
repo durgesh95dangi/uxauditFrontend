@@ -17,6 +17,9 @@ COPY scripts ./scripts
 RUN npm ci
 
 COPY . .
+
+ARG RAILWAY_GIT_COMMIT_SHA=local
+RUN echo "Building UXAuditX commit ${RAILWAY_GIT_COMMIT_SHA}"
 RUN npm run build
 
 EXPOSE 3000

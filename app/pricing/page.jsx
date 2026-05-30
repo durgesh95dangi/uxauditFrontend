@@ -3,6 +3,8 @@ import SiteFooter from "../../components/layout/SiteFooter.jsx";
 import PricingSection from "../../components/landing/PricingSection.jsx";
 import { createPageMetadata } from "../../lib/metadata.js";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = createPageMetadata({
   title: "Pricing — Free, Founder & Agency Plans",
   description:
