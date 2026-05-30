@@ -5,6 +5,7 @@ import Link from "next/link";
 import { initializePaddle } from "@paddle/paddle-js";
 import { resolveUserPlan, PLAN_STARTER } from "../../lib/audit/plans.js";
 import { isPlanAtLeast } from "../../lib/billing/planRank.js";
+import { getSiteUrl } from "../../lib/siteUrl.js";
 import { getSupabaseBrowserClient } from "../../lib/supabase/client.js";
 
 const FALLBACK_LABEL = "Get started";
@@ -77,6 +78,8 @@ export default function PricingPlanCta({
     };
   }, []);
 
+  const checkoutSuccessUrl = `${getSiteUrl()}/dashboard?upgraded=1`;
+
   useEffect(() => {
     if (!canCheckout) return undefined;
 
@@ -89,7 +92,7 @@ export default function PricingPlanCta({
         settings: {
           displayMode: "overlay",
           theme: "dark",
-          successUrl: `${window.location.origin}/dashboard?upgraded=1`
+          successUrl: checkoutSuccessUrl
         }
       }
     }).then((paddle) => {
@@ -101,7 +104,7 @@ export default function PricingPlanCta({
     return () => {
       cancelled = true;
     };
-  }, [canCheckout, paddleEnv, paddleToken]);
+  }, [canCheckout, checkoutSuccessUrl, paddleEnv, paddleToken]);
 
   const openCheckout = useCallback(async () => {
     if (!user) {
@@ -125,7 +128,7 @@ export default function PricingPlanCta({
             settings: {
               displayMode: "overlay",
               theme: "dark",
-              successUrl: `${window.location.origin}/dashboard?upgraded=1`
+              successUrl: checkoutSuccessUrl
             }
           }
         }));

@@ -1,5 +1,5 @@
 import {
-  getPublicSupabaseConfig,
+  getPublicAppConfig,
   hasPublicSupabaseConfig
 } from "../../../../lib/supabase/publicConfig.js";
 
@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const config = getPublicSupabaseConfig();
+  const config = getPublicAppConfig();
 
   if (!hasPublicSupabaseConfig(config)) {
     return Response.json(
@@ -19,7 +19,8 @@ export async function GET() {
   return Response.json(
     {
       supabaseUrl: config.supabaseUrl,
-      supabaseAnonKey: config.supabaseAnonKey
+      supabaseAnonKey: config.supabaseAnonKey,
+      siteUrl: config.siteUrl
     },
     {
       headers: {

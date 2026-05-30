@@ -16,7 +16,7 @@
   <body class="app-shell">
     <aside class="sidebar">
       <div class="sidebar-top">
-        <a class="brand" href="/dashboard.html">UXAuditX</a>
+        <a class="brand" href="/dashboard">UXAuditX</a>
         <button id="new-audit-btn" class="btn btn-primary sidebar-cta" type="button">
           + New Audit
         </button>
@@ -147,7 +147,7 @@
     </div>
 
     <script>
-      const API_BASE = "http://localhost:4000";
+      const API_BASE = window.location.origin;
       const TOKEN_KEY = "uxauditx_access_token";
       const POLL_INTERVAL = 3000;
 
@@ -207,12 +207,12 @@
           }).catch(() => {});
         }
         localStorage.removeItem(TOKEN_KEY);
-        window.location.href = "/login.html";
+        window.location.href = "/login";
       }
 
       async function loadUser() {
         if (!token) {
-          window.location.href = "/login.html";
+          window.location.href = "/login";
           return null;
         }
 
@@ -234,7 +234,7 @@
             currentUser.last_sign_in_at || "-";
         } catch {
           localStorage.removeItem(TOKEN_KEY);
-          window.location.href = "/login.html";
+          window.location.href = "/login";
           return null;
         }
 

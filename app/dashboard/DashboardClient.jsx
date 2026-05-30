@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PLAN_STARTER, resolveUserPlan, getPlanLabel, getMonthlyAuditLimitForUser } from "../../lib/audit/plans.js";
+import { signOutToLogin } from "../../lib/auth/signOut.js";
 import { useSupabase } from "../../lib/supabase/useSupabase.js";
 import AuditInput from "../../components/audit/AuditInput.jsx";
 import AuditProgress from "../../components/audit/AuditProgress.jsx";
@@ -102,9 +103,7 @@ export default function DashboardClient({ user: initialUser }) {
   async function handleSignOut() {
     if (!supabase) return;
     setIsSigningOut(true);
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+    await signOutToLogin(supabase, router);
   }
 
   return (

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { resolvePostLoginPath } from "../../../lib/auth/redirects.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import GoogleSignInButton from "../../../components/auth/GoogleSignInButton.jsx";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
@@ -30,12 +31,7 @@ export default function LoginPage() {
 
   function getRedirectPath() {
     if (typeof window === "undefined") return "/dashboard";
-    const params = new URLSearchParams(window.location.search);
-    const next = params.get("next");
-    if (next && next.startsWith("/") && !next.startsWith("//")) {
-      return next;
-    }
-    return "/dashboard";
+    return resolvePostLoginPath(new URLSearchParams(window.location.search));
   }
 
   async function handleSubmit(event) {

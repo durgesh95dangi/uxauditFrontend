@@ -11,6 +11,23 @@ const nextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" }
     ]
   },
+  async redirects() {
+    return [
+      { source: "/login.html", destination: "/login", permanent: true },
+      { source: "/signup.html", destination: "/signup", permanent: true },
+      { source: "/dashboard.html", destination: "/dashboard", permanent: true },
+      {
+        source: "/forgot-password.html",
+        destination: "/forgot-password",
+        permanent: true
+      },
+      {
+        source: "/reset-password.html",
+        destination: "/reset-password",
+        permanent: true
+      }
+    ];
+  },
   async headers() {
     return [
       {

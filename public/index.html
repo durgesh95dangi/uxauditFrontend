@@ -213,27 +213,8 @@
     </main>
 
     <script>
-      async function redirectIfAuthenticated() {
-        const token = localStorage.getItem("uxauditx_access_token");
-        if (!token) return;
-
-        try {
-          const response = await fetch("http://localhost:4000/me", {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-
-          if (!response.ok) {
-            localStorage.removeItem("uxauditx_access_token");
-            return;
-          }
-
-          const result = await response.json();
-          if (result.user) {
-            window.location.href = "/dashboard.html";
-          }
-        } catch {
-          // Keep user on landing when auth API is unavailable.
-        }
+      function redirectIfAuthenticated() {
+        localStorage.removeItem("uxauditx_access_token");
       }
 
       redirectIfAuthenticated();

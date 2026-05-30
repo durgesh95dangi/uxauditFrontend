@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { buildAuthCallbackUrl } from "../../../lib/siteUrl.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 
@@ -31,13 +32,10 @@ export default function ForgotPasswordPage() {
 
     setIsSubmitting(true);
 
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
-
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       trimmedEmail,
       {
-        redirectTo: `${origin}/auth/callback?next=/reset-password`
+        redirectTo: buildAuthCallbackUrl("/reset-password")
       }
     );
 

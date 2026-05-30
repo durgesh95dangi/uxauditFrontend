@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { resolvePostSignupPath } from "../../../lib/auth/redirects.js";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client.js";
@@ -25,20 +26,7 @@ export default function SignupPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
   function getPostAuthPath() {
-    const redirectPath = searchParams.get("redirect");
-    const plan = searchParams.get("plan");
-
-    if (redirectPath && redirectPath.startsWith("/") && !redirectPath.startsWith("//")) {
-      return plan
-        ? `${redirectPath}?plan=${encodeURIComponent(plan)}`
-        : redirectPath;
-    }
-
-    if (plan === "founder" || plan === "agency") {
-      return `/pricing?plan=${encodeURIComponent(plan)}`;
-    }
-
-    return "/dashboard";
+    return resolvePostSignupPath(searchParams);
   }
 
   async function finishSignup(sessionUser) {

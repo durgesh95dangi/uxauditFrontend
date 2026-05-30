@@ -5,6 +5,7 @@ import { useState } from "react";
 import SiteNav from "../../components/layout/SiteNav.jsx";
 import SiteFooter from "../../components/layout/SiteFooter.jsx";
 import PricingSection from "../../components/landing/PricingSection.jsx";
+import { signOutToLogin } from "../../lib/auth/signOut.js";
 import { useSupabase } from "../../lib/supabase/useSupabase.js";
 
 export default function PricingPageClient({ user }) {
@@ -15,9 +16,7 @@ export default function PricingPageClient({ user }) {
   async function handleSignOut() {
     if (!supabase) return;
     setIsSigningOut(true);
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    await signOutToLogin(supabase, router);
   }
 
   return (

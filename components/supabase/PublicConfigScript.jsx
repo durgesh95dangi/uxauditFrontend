@@ -1,12 +1,16 @@
-import { getPublicSupabaseConfig, hasPublicSupabaseConfig } from "../../lib/supabase/publicConfig.js";
+import {
+  getPublicAppConfig,
+  hasPublicSupabaseConfig
+} from "../../lib/supabase/publicConfig.js";
 
 export default function PublicConfigScript() {
-  const config = getPublicSupabaseConfig();
+  const config = getPublicAppConfig();
   if (!hasPublicSupabaseConfig(config)) return null;
 
   const payload = JSON.stringify({
     supabaseUrl: config.supabaseUrl,
-    supabaseAnonKey: config.supabaseAnonKey
+    supabaseAnonKey: config.supabaseAnonKey,
+    siteUrl: config.siteUrl
   });
 
   return (

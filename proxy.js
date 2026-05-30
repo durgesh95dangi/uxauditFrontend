@@ -37,7 +37,7 @@ export async function proxy(request) {
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("redirectedFrom", pathname);
+    url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
@@ -52,10 +52,14 @@ export async function proxy(request) {
 
   if (isGuestAuthPage && user) {
     const url = request.nextUrl.clone();
+    const next = request.nextUrl.searchParams.get("next");
     const redirect = request.nextUrl.searchParams.get("redirect");
     const plan = request.nextUrl.searchParams.get("plan");
 
-    if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
+    if (next && next.startsWith("/") && !next.startsWith("//")) {
+      url.pathname = next;
+      url.search = "";
+    } else if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
       url.pathname = redirect;
       url.search = plan ? `?plan=${encodeURIComponent(plan)}` : "";
     } else if (plan === "founder" || plan === "agency") {

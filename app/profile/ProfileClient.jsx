@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { signOutToLogin } from "../../lib/auth/signOut.js";
 import { useSupabase } from "../../lib/supabase/useSupabase.js";
 import SiteNav from "../../components/layout/SiteNav.jsx";
 import PageToolbar from "../../components/layout/PageToolbar.jsx";
@@ -99,9 +100,7 @@ export default function ProfileClient({ user }) {
   async function handleSignOut() {
     if (!supabase) return;
     setIsSigningOut(true);
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+    await signOutToLogin(supabase, router);
   }
 
   function startEditingName() {
