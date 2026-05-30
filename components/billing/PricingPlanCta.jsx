@@ -31,7 +31,7 @@ export default function PricingPlanCta({
 
     async function loadUser() {
       try {
-        const supabase = getSupabaseBrowserClient();
+        const supabase = await getSupabaseBrowserClient();
         const { data } = await supabase.auth.getUser();
         if (!cancelled) {
           setUser(data.user ?? null);

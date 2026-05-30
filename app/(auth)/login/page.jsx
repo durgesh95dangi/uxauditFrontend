@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
+import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function LoginPage() {
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase, configError, ready } = useSupabase();
 
   const [resetSuccess, setResetSuccess] = useState(false);
 
@@ -39,6 +39,12 @@ export default function LoginPage() {
     setError("");
     setIsSubmitting(true);
 
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -57,6 +63,12 @@ export default function LoginPage() {
   async function handleGoogleSignIn() {
     setError("");
     setIsGoogleLoading(true);
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      setIsGoogleLoading(false);
+      return;
+    }
 
     const origin =
       typeof window !== "undefined" ? window.location.origin : "";
@@ -117,7 +129,7 @@ export default function LoginPage() {
           <button
             type="submit"
             className="btn btn-primary btn-block"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !ready}
           >
             {isSubmitting ? "Signing in..." : "Sign In"}
           </button>
@@ -131,11 +143,16 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogleSignIn}
           className="btn btn-ghost btn-block btn-google"
-          disabled={isGoogleLoading}
+          disabled={isGoogleLoading || !ready}
         >
           {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
         </button>
 
+        {configError && (
+          <p className="auth-result error" role="alert">
+            {configError}
+          </p>
+        )}
         {error && (
           <p className="auth-result error" role="alert">
             {error}

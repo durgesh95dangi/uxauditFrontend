@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
+import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 
 function parseHashTokens() {
@@ -26,7 +26,7 @@ function parseHashTokens() {
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase, configError } = useSupabase();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -39,6 +39,8 @@ export default function ResetPasswordPage() {
     let cancelled = false;
 
     async function verifyRecoverySession() {
+      if (!supabase) return;
+
       const hashTokens = parseHashTokens();
 
       if (hashTokens?.errorDescription) {
@@ -100,6 +102,11 @@ export default function ResetPasswordPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      return;
+    }
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
@@ -185,6 +192,11 @@ export default function ResetPasswordPage() {
           </button>
         </form>
 
+        {configError && (
+          <p className="auth-result error" role="alert">
+            {configError}
+          </p>
+        )}
         {error && (
           <p className="auth-result error" role="alert">
             {error}

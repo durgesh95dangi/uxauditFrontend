@@ -2,17 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getSupabaseBrowserClient } from "../../lib/supabase/client.js";
+import { useSupabase } from "../../lib/supabase/useSupabase.js";
 import AdminLayout from "../../components/admin/AdminLayout.jsx";
 import SiteNav from "../../components/layout/SiteNav.jsx";
 import AdminPinGate from "./AdminPinGate.jsx";
 
 export default function AdminShell({ user, needsPin, children }) {
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase } = useSupabase();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleSignOut() {
+    if (!supabase) return;
     setIsSigningOut(true);
     await supabase.auth.signOut();
     router.push("/login?next=/admin");

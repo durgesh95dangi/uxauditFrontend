@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
-import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
+import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase, configError, ready } = useSupabase();
 
   const [step, setStep] = useState("credentials");
   const [email, setEmail] = useState("");
@@ -46,6 +46,11 @@ export default function SignupPage() {
     event.preventDefault();
     setError("");
     setInfoMessage("");
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      return;
+    }
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
@@ -95,6 +100,11 @@ export default function SignupPage() {
     setError("");
     setInfoMessage("");
 
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      return;
+    }
+
     const trimmedEmail = email.trim();
     const token = otp.replace(/\s/g, "");
 
@@ -124,6 +134,11 @@ export default function SignupPage() {
   async function handleResendCode() {
     setError("");
     setInfoMessage("");
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      return;
+    }
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
@@ -158,6 +173,12 @@ export default function SignupPage() {
   async function handleGoogleSignUp() {
     setError("");
     setIsGoogleLoading(true);
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      setIsGoogleLoading(false);
+      return;
+    }
 
     const origin =
       typeof window !== "undefined" ? window.location.origin : "";
@@ -217,7 +238,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 className="btn btn-primary btn-block"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !ready}
               >
                 {isSubmitting ? "Sending code..." : "Create Account"}
               </button>
@@ -231,7 +252,7 @@ export default function SignupPage() {
               type="button"
               onClick={handleGoogleSignUp}
               className="btn btn-ghost btn-block btn-google"
-              disabled={isGoogleLoading}
+              disabled={isGoogleLoading || !ready}
             >
               {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
             </button>
@@ -262,7 +283,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 className="btn btn-primary btn-block"
-                disabled={isVerifying}
+                disabled={isVerifying || !ready}
               >
                 {isVerifying ? "Verifying..." : "Verify and continue"}
               </button>
@@ -289,6 +310,11 @@ export default function SignupPage() {
           </>
         )}
 
+        {configError && (
+          <p className="auth-result error" role="alert">
+            {configError}
+          </p>
+        )}
         {error && (
           <p className="auth-result error" role="alert">
             {error}

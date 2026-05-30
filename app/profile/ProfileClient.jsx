@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { getSupabaseBrowserClient } from "../../lib/supabase/client.js";
+import { useSupabase } from "../../lib/supabase/useSupabase.js";
 import SiteNav from "../../components/layout/SiteNav.jsx";
 import PageToolbar from "../../components/layout/PageToolbar.jsx";
 import {
@@ -80,7 +80,7 @@ function IconClose() {
 
 export default function ProfileClient({ user }) {
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase } = useSupabase();
   const nameInputRef = useRef(null);
 
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -97,6 +97,7 @@ export default function ProfileClient({ user }) {
   const savedName = user.fullName || resolveFullName(user);
 
   async function handleSignOut() {
+    if (!supabase) return;
     setIsSigningOut(true);
     await supabase.auth.signOut();
     router.push("/login");
@@ -133,6 +134,11 @@ export default function ProfileClient({ user }) {
 
     if (trimmed === savedName) {
       setIsEditingName(false);
+      return;
+    }
+
+    if (!supabase) {
+      setSaveError("Still loading. Please try again.");
       return;
     }
 

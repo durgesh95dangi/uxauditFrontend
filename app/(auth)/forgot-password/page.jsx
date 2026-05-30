@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
+import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 
 export default function ForgotPasswordPage() {
-  const supabase = getSupabaseBrowserClient();
+  const { supabase, configError, ready } = useSupabase();
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -17,6 +17,11 @@ export default function ForgotPasswordPage() {
     event.preventDefault();
     setError("");
     setSuccessMessage("");
+
+    if (!supabase) {
+      setError("Still loading. Please try again.");
+      return;
+    }
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
@@ -78,12 +83,17 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             className="btn btn-primary btn-block"
-            disabled={isSubmitting || Boolean(successMessage)}
+            disabled={isSubmitting || Boolean(successMessage) || !ready}
           >
             {isSubmitting ? "Sending..." : "Send reset link"}
           </button>
         </form>
 
+        {configError && (
+          <p className="auth-result error" role="alert">
+            {configError}
+          </p>
+        )}
         {error && (
           <p className="auth-result error" role="alert">
             {error}

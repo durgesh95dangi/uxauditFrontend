@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PLAN_STARTER, resolveUserPlan, getPlanLabel, getMonthlyAuditLimitForUser } from "../../lib/audit/plans.js";
-import { getSupabaseBrowserClient } from "../../lib/supabase/client.js";
+import { useSupabase } from "../../lib/supabase/useSupabase.js";
 import AuditInput from "../../components/audit/AuditInput.jsx";
 import AuditProgress from "../../components/audit/AuditProgress.jsx";
 import AuditReport from "../../components/audit/AuditReport.jsx";
@@ -14,7 +14,7 @@ import SiteNav from "../../components/layout/SiteNav.jsx";
 export default function DashboardClient({ user: initialUser }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = getSupabaseBrowserClient();
+  const { supabase } = useSupabase();
 
   const [user, setUser] = useState(initialUser);
   const [view, setView] = useState("input");
@@ -35,7 +35,7 @@ export default function DashboardClient({ user: initialUser }) {
     setShowUpgradeBanner(true);
 
     async function syncSubscriptionPlan() {
-      if (cancelled) return;
+      if (cancelled || !supabase) return;
 
       await supabase.auth.refreshSession();
       const { data } = await supabase.auth.getUser();
@@ -73,7 +73,7 @@ export default function DashboardClient({ user: initialUser }) {
     return () => {
       cancelled = true;
     };
-  }, [router, searchParams, supabase.auth]);
+  }, [router, searchParams, supabase]);
 
   function handleJobStart(newJobId) {
     setJobId(newJobId);
@@ -100,6 +100,7 @@ export default function DashboardClient({ user: initialUser }) {
   }
 
   async function handleSignOut() {
+    if (!supabase) return;
     setIsSigningOut(true);
     await supabase.auth.signOut();
     router.push("/login");
