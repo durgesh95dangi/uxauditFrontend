@@ -90,7 +90,7 @@ Agency is capped at 50/month in app logic. For higher volume, keep the **Contact
 
 | Issue | Fix |
 |-------|-----|
-| Button says "Coming soon" | Set `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` + price IDs |
+| Button says "Coming soon" | Redeploy after setting Paddle env vars; pricing loads config from `/api/billing/config` at runtime |
 | Checkout opens but plan not updated | Check webhook URL, secret, and delivery logs |
 | Invalid signature | Use raw webhook body; secret must match destination |
 | User still on free after pay | Ensure checkout includes `customData.user_id` (logged-in user) |

@@ -8,7 +8,6 @@ import {
 } from "./LandingIcons.jsx";
 import PricingPlanCta from "../billing/PricingPlanCta.jsx";
 import { PRICING_CUSTOM, PRICING_PLANS } from "../../lib/audit/pricing.js";
-import { isPaddleCheckoutReady } from "../../lib/billing/paddleConfig.js";
 
 const PLAN_ICONS = {
   free: IconStar,
@@ -20,11 +19,6 @@ const PLAN_TONES = {
   free: "blue",
   founder: "violet",
   agency: "indigo"
-};
-
-const PADDLE_PRICES = {
-  founder: process.env.NEXT_PUBLIC_PADDLE_PRICE_FOUNDER || "",
-  agency: process.env.NEXT_PUBLIC_PADDLE_PRICE_AGENCY || ""
 };
 
 export default function PricingSection({ withAnchor = true }) {
@@ -48,8 +42,6 @@ export default function PricingSection({ withAnchor = true }) {
           {PRICING_PLANS.map((plan) => {
             const Icon = PLAN_ICONS[plan.id] || IconStar;
             const tone = PLAN_TONES[plan.id] || "blue";
-            const priceId = PADDLE_PRICES[plan.id] || "";
-            const checkoutEnabled = isPaddleCheckoutReady(plan.id);
 
             return (
               <article
@@ -86,10 +78,8 @@ export default function PricingSection({ withAnchor = true }) {
                 ) : (
                   <PricingPlanCta
                     planId={plan.id}
-                    priceId={priceId}
                     label={plan.checkoutLabel || plan.cta}
                     featured={plan.featured}
-                    checkoutEnabled={checkoutEnabled}
                   />
                 )}
               </article>
