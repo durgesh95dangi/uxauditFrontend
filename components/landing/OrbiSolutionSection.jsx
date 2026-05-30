@@ -69,7 +69,7 @@ export default function OrbiSolutionSection() {
                     <p>{step.body}</p>
                   </div>
                 </div>
-                <div className="orbi-solution-step-visual">
+                <div className={`orbi-solution-step-visual orbi-solution-step-visual--${step.preview}`}>
                   <StepVisual type={step.preview} />
                 </div>
               </li>

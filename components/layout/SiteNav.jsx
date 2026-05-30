@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import BrandLogo from "./BrandLogo.jsx";
 import UserNavMenu from "./UserNavMenu.jsx";
+import UserAvatar from "./UserAvatar.jsx";
 import AdminMenuToggle from "../admin/AdminMenuToggle.jsx";
+import {
+  resolveAvatarUrl,
+  resolveFullName,
+  resolveInitial
+} from "../../lib/user/display.js";
 
 const TABLET_MOBILE_QUERY = "(max-width: 1024px)";
 
@@ -44,6 +50,10 @@ export default function SiteNav({
       : AUTHED_NAV_LINKS
     : PUBLIC_NAV_LINKS;
   const showDesktopLinks = !user && !minimal;
+  const showHeaderUserMenu = user && !(showSiteNavMenu && isCompactNav);
+  const avatarUrl = user ? resolveAvatarUrl(user) : null;
+  const profileName = user ? resolveFullName(user) : "";
+  const profileInitial = user ? resolveInitial(user) : "";
 
   useEffect(() => {
     const media = window.matchMedia(TABLET_MOBILE_QUERY);
@@ -102,7 +112,9 @@ export default function SiteNav({
             hideBrand || showMenuButton ? " nav-bar-inner--no-brand" : ""
           }${showMenuButton ? " nav-bar-inner--with-menu" : ""}${
             fullWidth ? " nav-bar-inner--full-width" : ""
-          }${showSiteNavMenu ? " nav-bar-inner--site" : ""}`}
+          }${showSiteNavMenu ? " nav-bar-inner--site" : ""}${
+            user && showSiteNavMenu ? " nav-bar-inner--authed" : ""
+          }`}
         >
           {showMenuButton && (
             <button
@@ -113,19 +125,6 @@ export default function SiteNav({
               aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
               <AdminMenuToggle open={menuOpen} />
-            </button>
-          )}
-
-          {showSiteNavMenu && (
-            <button
-              type="button"
-              className="nav-mobile-toggle btn btn-ghost btn-sm"
-              onClick={toggleMobileMenu}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="site-mobile-nav"
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              <AdminMenuToggle open={mobileMenuOpen} />
             </button>
           )}
 
@@ -143,13 +142,13 @@ export default function SiteNav({
           </nav>
 
           <div className="nav-actions">
-            {user ? (
+            {showHeaderUserMenu ? (
               <UserNavMenu
                 user={user}
                 onSignOut={onSignOut}
                 isSigningOut={isSigningOut}
               />
-            ) : (
+            ) : !user ? (
               <div className="nav-actions-guest">
                 <Link href="/login" className="btn btn-nav-ghost">
                   Log In
@@ -158,8 +157,21 @@ export default function SiteNav({
                   Start Free
                 </Link>
               </div>
-            )}
+            ) : null}
           </div>
+
+          {showSiteNavMenu && (
+            <button
+              type="button"
+              className="nav-mobile-toggle btn btn-ghost btn-sm"
+              onClick={toggleMobileMenu}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="site-mobile-nav"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              <AdminMenuToggle open={mobileMenuOpen} />
+            </button>
+          )}
         </div>
       </header>
 
@@ -178,6 +190,28 @@ export default function SiteNav({
             aria-modal="true"
             aria-label="Site navigation"
           >
+            {user && (
+              <div className="nav-mobile-drawer-profile">
+                <span className="nav-mobile-drawer-profile-avatar">
+                  {avatarUrl ? (
+                    <UserAvatar
+                      src={avatarUrl}
+                      size={40}
+                      className="nav-mobile-drawer-profile-avatar-img"
+                    />
+                  ) : (
+                    <span className="nav-mobile-drawer-profile-avatar-fallback">
+                      {profileInitial}
+                    </span>
+                  )}
+                </span>
+                <div className="nav-mobile-drawer-profile-meta">
+                  <strong>{profileName}</strong>
+                  {user.email && <span>{user.email}</span>}
+                </div>
+              </div>
+            )}
+
             <nav className="nav-mobile-drawer-links" aria-label="Main">
               {drawerLinks.map((link) => (
                 <Link
