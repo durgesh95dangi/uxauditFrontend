@@ -8116,6 +8116,14 @@ label.profile-row-label {
   .audit-input-field {
     height: 48px;
   }
+  .admin-reports-run-form {
+    flex-direction: column;
+  }
+  .admin-reports-run-input,
+  .admin-reports-run-btn {
+    width: 100%;
+    min-width: 0;
+  }
   .site-footer-grid { grid-template-columns: 1fr; }
   .site-footer-bottom {
     flex-direction: column;
@@ -8987,8 +8995,41 @@ label.profile-row-label {
   gap: var(--space-md);
 }
 
-.admin-audit-panel {
-  max-width: 720px;
+.admin-reports-run {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.admin-reports-run-form {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+
+.admin-reports-run-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.admin-reports-run-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.admin-reports-run-btn {
+  flex-shrink: 0;
+  min-width: 7rem;
+}
+
+.admin-reports-run-option {
+  margin-top: 0;
 }
 
 .admin-audit-option {

@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import AuditProgress from "../audit/AuditProgress.jsx";
 import AdminConfirmDialog from "./AdminConfirmDialog.jsx";
 import AdminPageHeader from "./AdminPageHeader.jsx";
+import AdminReportsRunBar from "./AdminReportsRunBar.jsx";
 import { JobsTable, adminFetch, handleAdminForbidden } from "./adminShared.jsx";
 
 export default function AdminReports() {
@@ -13,6 +15,7 @@ export default function AdminReports() {
   const [error, setError] = useState(null);
   const [deleteJobTarget, setDeleteJobTarget] = useState(null);
   const [busyJobId, setBusyJobId] = useState(null);
+  const [activeJobId, setActiveJobId] = useState(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -67,13 +70,46 @@ export default function AdminReports() {
     }
   }
 
+  function handleAuditStarted(jobId) {
+    setActiveJobId(jobId);
+    setError(null);
+  }
+
+  function handleAuditComplete(completedJobId) {
+    setActiveJobId(null);
+    router.push(`/admin/report/${completedJobId}`);
+  }
+
+  function handleAuditBack() {
+    setActiveJobId(null);
+    loadData();
+  }
+
+  if (activeJobId) {
+    return (
+      <div className="admin-page">
+        <AuditProgress
+          jobId={activeJobId}
+          onComplete={handleAuditComplete}
+          onBackToReports={handleAuditBack}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="admin-page">
       <AdminPageHeader
         title="Reports"
-        subtitle="View, cancel, and delete audit reports"
+        subtitle="Run audits, view results, cancel, or delete"
         onRefresh={loadData}
         loading={loading}
+      />
+
+      <AdminReportsRunBar
+        router={router}
+        onStarted={handleAuditStarted}
+        onError={setError}
       />
 
       {error && (
