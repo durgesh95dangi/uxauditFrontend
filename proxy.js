@@ -33,8 +33,20 @@ export async function proxy(request) {
 
   if (isGuestAuthPage && user) {
     const url = request.nextUrl.clone();
-    url.pathname = isSuperadmin(user) ? "/admin" : "/dashboard";
-    url.search = "";
+    const redirect = request.nextUrl.searchParams.get("redirect");
+    const plan = request.nextUrl.searchParams.get("plan");
+
+    if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
+      url.pathname = redirect;
+      url.search = plan ? `?plan=${encodeURIComponent(plan)}` : "";
+    } else if (plan === "founder" || plan === "agency") {
+      url.pathname = "/pricing";
+      url.search = `?plan=${encodeURIComponent(plan)}`;
+    } else {
+      url.pathname = isSuperadmin(user) ? "/admin" : "/dashboard";
+      url.search = "";
+    }
+
     return NextResponse.redirect(url);
   }
 

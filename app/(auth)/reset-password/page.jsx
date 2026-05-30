@@ -26,7 +26,7 @@ function parseHashTokens() {
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const { supabase, configError } = useSupabase();
+  const { supabase, configError, retry } = useSupabase();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -194,7 +194,10 @@ export default function ResetPasswordPage() {
 
         {configError && (
           <p className="auth-result error" role="alert">
-            {configError}
+            {configError}{" "}
+            <button type="button" className="auth-link-button" onClick={retry}>
+              Retry
+            </button>
           </p>
         )}
         {error && (

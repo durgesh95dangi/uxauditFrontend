@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { createPageMetadata } from "../../../lib/metadata.js";
 
 export const dynamic = "force-dynamic";
@@ -11,5 +10,5 @@ export const metadata = createPageMetadata({
 });
 
 export default function SignupLayout({ children }) {
-  return <Suspense fallback={null}>{children}</Suspense>;
+  return children;
 }

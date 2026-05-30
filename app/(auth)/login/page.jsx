@@ -9,7 +9,7 @@ import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { supabase, configError, ready } = useSupabase();
+  const { supabase, configError, ready, retry } = useSupabase();
 
   const [resetSuccess, setResetSuccess] = useState(false);
 
@@ -150,7 +150,10 @@ export default function LoginPage() {
 
         {configError && (
           <p className="auth-result error" role="alert">
-            {configError}
+            {configError}{" "}
+            <button type="button" className="auth-link-button" onClick={retry}>
+              Retry
+            </button>
           </p>
         )}
         {error && (

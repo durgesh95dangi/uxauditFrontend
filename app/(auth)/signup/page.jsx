@@ -5,13 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
+import { getSupabaseBrowserClient } from "../../../lib/supabase/client.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { supabase, configError, ready } = useSupabase();
+  const { supabase, configError, ready, retry } = useSupabase();
 
   const [step, setStep] = useState("credentials");
   const [email, setEmail] = useState("");
@@ -24,21 +25,33 @@ export default function SignupPage() {
   const [isResending, setIsResending] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
+  function getPostAuthPath() {
+    const redirectPath = searchParams.get("redirect");
+    const plan = searchParams.get("plan");
+
+    if (redirectPath && redirectPath.startsWith("/") && !redirectPath.startsWith("//")) {
+      return plan
+        ? `${redirectPath}?plan=${encodeURIComponent(plan)}`
+        : redirectPath;
+    }
+
+    if (plan === "founder" || plan === "agency") {
+      return `/pricing?plan=${encodeURIComponent(plan)}`;
+    }
+
+    return "/dashboard";
+  }
+
   async function finishSignup(sessionUser) {
+    const client = supabase || (await getSupabaseBrowserClient());
+
     if (sessionUser && !sessionUser.user_metadata?.plan) {
-      await supabase.auth.updateUser({
+      await client.auth.updateUser({
         data: starterPlanMetadata(sessionUser.user_metadata || {})
       });
     }
 
-    const redirectPath = searchParams.get("redirect");
-    const plan = searchParams.get("plan");
-    const nextPath =
-      redirectPath === "/pricing" || plan === "founder" || plan === "agency"
-        ? "/pricing"
-        : "/dashboard";
-
-    router.push(nextPath);
+    router.push(getPostAuthPath());
     router.refresh();
   }
 
@@ -186,7 +199,7 @@ export default function SignupPage() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${origin}/auth/callback?next=/dashboard`
+        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(getPostAuthPath())}`
       }
     });
 
@@ -312,7 +325,10 @@ export default function SignupPage() {
 
         {configError && (
           <p className="auth-result error" role="alert">
-            {configError}
+            {configError}{" "}
+            <button type="button" className="auth-link-button" onClick={retry}>
+              Retry
+            </button>
           </p>
         )}
         {error && (

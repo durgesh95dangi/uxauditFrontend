@@ -6,7 +6,7 @@ import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 
 export default function ForgotPasswordPage() {
-  const { supabase, configError, ready } = useSupabase();
+  const { supabase, configError, ready, retry } = useSupabase();
 
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -91,7 +91,10 @@ export default function ForgotPasswordPage() {
 
         {configError && (
           <p className="auth-result error" role="alert">
-            {configError}
+            {configError}{" "}
+            <button type="button" className="auth-link-button" onClick={retry}>
+              Retry
+            </button>
           </p>
         )}
         {error && (

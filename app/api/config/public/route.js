@@ -1,11 +1,15 @@
+import {
+  getPublicSupabaseConfig,
+  hasPublicSupabaseConfig
+} from "../../../../lib/supabase/publicConfig.js";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+  const config = getPublicSupabaseConfig();
 
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!hasPublicSupabaseConfig(config)) {
     return Response.json(
       { error: "Supabase public configuration is not set on the server" },
       { status: 503 }
@@ -14,8 +18,8 @@ export async function GET() {
 
   return Response.json(
     {
-      supabaseUrl,
-      supabaseAnonKey
+      supabaseUrl: config.supabaseUrl,
+      supabaseAnonKey: config.supabaseAnonKey
     },
     {
       headers: {
