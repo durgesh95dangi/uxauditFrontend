@@ -83,6 +83,40 @@ Build logs should show Docker steps (`FROM mcr.microsoft.com/playwright:v1.60.0-
 | Build timeout | Playwright image is large; retry deploy or increase build timeout if available |
 | Browser crashes mid-audit | Bump memory to 2 GB+; `--disable-dev-shm-usage` is already in launch args |
 | App won't start | Check all required env vars; view deploy/runtime logs |
+| **Pricing still shows "Coming soon" / Starter & Pro $49** | Production is on an **old deploy**. See [Deploy stuck on old code](#deploy-stuck-on-old-code) below |
+
+---
+
+## Deploy stuck on old code
+
+If [uxauditx.com/pricing](https://uxauditx.com/pricing) still shows **Starter / Pro $49 / Coming soon**, the live app has **not** picked up recent GitHub commits.
+
+### Verify
+
+Open these URLs after a deploy:
+
+| URL | Expected (current code) | Old deploy |
+|-----|-------------------------|------------|
+| `https://uxauditx.com/api/version` | JSON with `"appVersion": "2026-05-30-pricing-v2"` and `"plans": ["free","founder","agency"]` | 404 |
+| `https://uxauditx.com/api/billing/config` | JSON with `clientToken` and `prices.founder` | 404 |
+| `/pricing` page title | **Founder & Agency** — Free / $19 / $199 | Pro $49 / Coming soon |
+
+### Fix in Railway
+
+1. **Project → Service → Settings → Source**
+   - Repo: `durgesh95dangi/uxauditFrontend`
+   - Branch: **main**
+   - **Wait for CI** / auto-deploy: **enabled**
+2. **Settings → Build**
+   - Builder: **Dockerfile** (not Nixpacks)
+   - Dockerfile path: `Dockerfile`
+3. **Deployments** tab
+   - Check latest deploy — if **Failed**, open build logs and fix the error
+   - If no new deploy after git push, click **Deploy → Redeploy** on the latest commit
+4. After deploy succeeds, hard-refresh `/pricing` (`Ctrl+Shift+R`) or use an incognito window
+5. If using **Cloudflare** in front of Railway: **Caching → Purge Everything** once after the new deploy
+
+Pushes to `main` on GitHub do **nothing** until Railway shows a **successful** deployment for that commit SHA.
 
 ---
 
