@@ -148,13 +148,16 @@ if (process.env.RUN_LLM_LIVE_TEST === "1" && getLlmConfig().apiKey) {
       "landing-page",
       { sectionIndex: 0, yStart: 0 }
     );
-    if (!result || !Array.isArray(result.issues)) {
+    if (result.llmError) {
+      fail("Live vision analyzeSection", new Error(result.llmError));
+    } else if (!result || !Array.isArray(result.issues)) {
       throw new Error("analyzeSection returned invalid shape");
+    } else {
+      pass(
+        "Live vision analyzeSection",
+        `issues=${result.issues.length}, score=${result.sectionScore ?? "—"}`
+      );
     }
-    pass(
-      "Live vision analyzeSection",
-      `issues=${result.issues.length}, score=${result.sectionScore ?? "—"}`
-    );
   } catch (error) {
     fail("Live vision analyzeSection", error);
   }
