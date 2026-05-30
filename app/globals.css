@@ -1026,6 +1026,74 @@ p { margin: 0; }
   gap: var(--space-xs);
 }
 
+.nav-actions-guest {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.nav-mobile-toggle {
+  display: none;
+}
+
+.nav-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.nav-mobile-drawer {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  z-index: 56;
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+  padding: var(--space-md) var(--grid-margin) var(--space-xl);
+  border-bottom: 1px solid var(--color-hairline);
+  background: rgba(8, 8, 8, 0.98);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.nav-mobile-drawer-links {
+  display: grid;
+  gap: 2px;
+}
+
+.nav-mobile-drawer-link {
+  display: block;
+  padding: 14px var(--space-sm);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  transition: background 0.15s ease;
+}
+
+.nav-mobile-drawer-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-mobile-drawer-actions {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.nav-mobile-drawer-signout {
+  color: var(--color-error);
+}
+
 /* =============================================================
    Hero + Mesh gradient
    ============================================================= */
@@ -7657,6 +7725,32 @@ label.profile-row-label {
   .showcase-band-dark-inner { grid-template-columns: 1fr; }
   .site-footer-grid { grid-template-columns: repeat(2, 1fr); }
   .nav-links { display: none; }
+  .nav-actions-guest { display: none; }
+  .nav-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .nav-bar-inner--mobile {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+  }
+  .nav-bar-inner--mobile .nav-brand {
+    grid-column: unset;
+    flex: 1;
+    min-width: 0;
+  }
+  .nav-bar-inner--mobile .nav-actions {
+    grid-column: unset;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
   .nav-user-name { display: none; }
   .nav-user-trigger { padding-right: 8px; }
   .report-grid { grid-template-columns: 1fr; }
@@ -7719,8 +7813,51 @@ label.profile-row-label {
   .dashboard-user-email { display: none; }
   .nav-user-email { display: none; }
   .audit-input-card { padding: var(--space-xl) var(--space-md); }
-  .audit-input-btn { width: 100%; }
+  .audit-input-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .audit-input-field,
+  .audit-input-btn { width: 100%; min-width: 0; }
   .site-footer-grid { grid-template-columns: 1fr; }
+  .site-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .site-footer-legal {
+    margin-left: 0;
+    gap: var(--space-md);
+  }
+  .orbi-feed {
+    padding: var(--space-lg) var(--space-md);
+    margin-top: var(--space-2xl);
+  }
+  .orbi-solution-step-visual {
+    --orbi-solution-preview-h: 220px;
+    height: var(--orbi-solution-preview-h);
+    min-height: var(--orbi-solution-preview-h);
+    max-height: var(--orbi-solution-preview-h);
+  }
+  .pricing-card {
+    padding: var(--space-xl) var(--space-lg);
+  }
+  .pricing-price {
+    font-size: 34px;
+  }
+  .dashboard-upgrade-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dashboard-upgrade-banner-dismiss {
+    align-self: flex-end;
+  }
+  .recent-audits-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .recent-audits-table {
+    min-width: 520px;
+  }
 
   .dashboard-main {
     padding-block: var(--space-lg) var(--space-2xl);
@@ -7753,6 +7890,24 @@ label.profile-row-label {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --grid-margin: 16px;
+  }
+
+  .hero-orbi-title {
+    font-size: clamp(1.85rem, 9vw, 2.35rem);
+  }
+
+  .hero-orbi-btn,
+  .orbi-solution-btn {
+    max-width: none;
+    width: 100%;
+  }
+
+  .nav-bar-inner--full-width {
+    padding-inline: var(--space-md);
+  }
+
   .hero-title {
     font-size: clamp(1.75rem, 8vw, 2rem);
   }
