@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import AdminConfirmDialog from "./AdminConfirmDialog.jsx";
 import AdminPageHeader from "./AdminPageHeader.jsx";
 import AdminUserModal from "./AdminUserModal.jsx";
-import { adminFetch, formatDate, handleAdminForbidden } from "./adminShared.jsx";
+import { adminFetch, formatDate, formatDateOnly, handleAdminForbidden, PlanBadge } from "./adminShared.jsx";
 
 export default function AdminUsers() {
   const router = useRouter();
@@ -128,9 +128,11 @@ export default function AdminUsers() {
               <tr>
                 <th>Email</th>
                 <th>Name</th>
+                <th>Plan</th>
                 <th>Provider</th>
                 <th>Audits</th>
                 <th>Joined</th>
+                <th>Plan purchased</th>
                 <th>Last sign-in</th>
                 <th aria-label="Actions" />
               </tr>
@@ -138,13 +140,13 @@ export default function AdminUsers() {
             <tbody>
               {loading && users.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="admin-empty">
+                  <td colSpan={9} className="admin-empty">
                     Loading users…
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="admin-empty">
+                  <td colSpan={9} className="admin-empty">
                     No users found
                   </td>
                 </tr>
@@ -155,6 +157,12 @@ export default function AdminUsers() {
                       {row.email}
                     </td>
                     <td>{row.fullName || "—"}</td>
+                    <td>
+                      <PlanBadge
+                        planLabel={row.planLabel}
+                        isActivePaid={row.isActivePaid}
+                      />
+                    </td>
                     <td className="admin-muted">{row.provider}</td>
                     <td>
                       {row.auditCount}
@@ -162,7 +170,8 @@ export default function AdminUsers() {
                         <span className="admin-muted"> ({row.auditsDone} done)</span>
                       )}
                     </td>
-                    <td className="admin-date">{formatDate(row.createdAt)}</td>
+                    <td className="admin-date">{formatDateOnly(row.createdAt)}</td>
+                    <td className="admin-date">{formatDateOnly(row.planSubscribedAt)}</td>
                     <td className="admin-date">{formatDate(row.lastSignInAt)}</td>
                     <td className="ra-action admin-row-actions">
                       <Link

@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import nextDynamic from "next/dynamic";
 import { FREE_MONTHLY_AUDIT_LIMIT } from "../lib/audit/plans.js";
+import { isSuperadmin } from "../lib/auth/superadmin.js";
+import { getSupabaseServerClient } from "../lib/supabase/server.js";
 import SiteNav from "../components/layout/SiteNav.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import HeroOrbiFeed from "../components/landing/HeroOrbiFeed.jsx";
@@ -143,7 +146,16 @@ const WHY_CHOOSE = [
   }
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = await getSupabaseServerClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect(isSuperadmin(user) ? "/admin" : "/dashboard");
+  }
+
   return (
     <div className="page-shell">
       <SchemaMarkup schema={softwareApplicationSchema} />

@@ -707,11 +707,19 @@ p { margin: 0; }
 }
 
 .btn-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   background: transparent;
   border-color: var(--color-hairline);
   color: var(--color-ink);
   border-radius: var(--radius-sm);
   height: 40px;
+}
+
+.btn-google-icon {
+  flex-shrink: 0;
 }
 
 .btn-google:hover:not(:disabled) {
@@ -4711,6 +4719,42 @@ p { margin: 0; }
   box-shadow: 0 0 20px rgba(255, 122, 89, 0.2);
 }
 
+.pricing-badge-current {
+  background: rgba(52, 211, 153, 0.14);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: var(--color-success);
+  box-shadow: none;
+}
+
+.pricing-card-current {
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.pricing-authed {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.pricing-authed-current {
+  max-width: 420px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.pricing-authed-upgrades-title {
+  margin: 0 0 var(--space-lg);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.pricing-authed-grid {
+  max-width: 920px;
+  margin-inline: auto;
+}
+
 /* FAQ */
 .faq-list {
   margin-top: 0;
@@ -6550,6 +6594,31 @@ label.profile-row-label {
   min-width: 0;
 }
 
+.page-toolbar--report {
+  flex-wrap: nowrap;
+  gap: var(--space-sm);
+}
+
+.page-toolbar--report .page-toolbar-actions {
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.page-toolbar--report .page-toolbar-back {
+  flex-shrink: 0;
+}
+
+.page-toolbar-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+}
+
 /* =============================================================
    AuditReport
    ============================================================= */
@@ -7702,16 +7771,49 @@ label.profile-row-label {
   word-break: break-word;
 }
 
-.recent-audit-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-sm) var(--space-md);
+.recent-audit-card-details {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
 }
 
-.recent-audit-card-date {
-  font-size: 13px;
+.recent-audit-card-detail {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.recent-audit-card-detail dt {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--color-mute);
+}
+
+.recent-audit-card-detail dd {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.recent-audit-card-status--done {
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+.recent-audit-card-status--failed {
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+.recent-audit-card-status--running {
+  color: var(--color-link);
+  font-weight: 500;
+}
+
+.recent-audit-card-status--pending {
+  color: var(--color-body);
 }
 
 .recent-audit-card-action {
@@ -8154,6 +8256,11 @@ label.profile-row-label {
   .page-toolbar,
   .report-toolbar {
     flex-wrap: wrap;
+  }
+
+  .page-toolbar--report,
+  .page-toolbar--report .page-toolbar-actions {
+    flex-wrap: nowrap;
   }
 
   .page-toolbar-actions,
@@ -8937,6 +9044,43 @@ label.profile-row-label {
   color: var(--gradient-preview-start);
 }
 
+.admin-stat-card--revenue .admin-stat-value {
+  color: var(--color-success);
+}
+
+.admin-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas-soft-2);
+  color: var(--color-ink);
+}
+
+.admin-plan-badge--founder {
+  color: var(--color-brand-bright);
+  border-color: rgba(255, 122, 89, 0.28);
+  background: rgba(255, 122, 89, 0.1);
+}
+
+.admin-plan-badge--agency {
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.28);
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.admin-plan-badge--free {
+  color: var(--color-body);
+}
+
+.admin-plan-badge--inactive {
+  opacity: 0.65;
+}
+
 .admin-severity-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -9012,6 +9156,17 @@ label.profile-row-label {
   font-size: 15px;
   color: var(--color-ink);
   font-weight: 600;
+}
+
+.admin-detail-card--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-detail-mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  word-break: break-all;
 }
 
 .admin-panel {

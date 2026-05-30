@@ -49,7 +49,8 @@ export default function SiteNav({
       ? AUTHED_NAV_LINKS.filter((link) => link.href !== "/profile")
       : AUTHED_NAV_LINKS
     : PUBLIC_NAV_LINKS;
-  const showDesktopLinks = !user && !minimal;
+  const showDesktopLinks = user ? true : !minimal;
+  const desktopLinks = user ? AUTHED_NAV_LINKS : PUBLIC_NAV_LINKS;
   const showHeaderUserMenu = user && !(showSiteNavMenu && isCompactNav);
   const avatarUrl = user ? resolveAvatarUrl(user) : null;
   const profileName = user ? resolveFullName(user) : "";
@@ -134,11 +135,17 @@ export default function SiteNav({
 
           <nav className="nav-links" aria-label="Main">
             {showDesktopLinks &&
-              PUBLIC_NAV_LINKS.map((link) => (
-                <a key={link.href} href={link.href}>
-                  {link.label}
-                </a>
-              ))}
+              desktopLinks.map((link) =>
+                link.href.startsWith("/#") ? (
+                  <a key={link.href} href={link.href}>
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link key={link.href} href={link.href}>
+                    {link.label}
+                  </Link>
+                )
+              )}
           </nav>
 
           <div className="nav-actions">

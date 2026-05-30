@@ -6,6 +6,7 @@ import { useState } from "react";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client.js";
+import GoogleSignInButton from "../../../components/auth/GoogleSignInButton.jsx";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
@@ -23,8 +24,6 @@ export default function SignupPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
   function getPostAuthPath() {
     const redirectPath = searchParams.get("redirect");
     const plan = searchParams.get("plan");
@@ -183,32 +182,6 @@ export default function SignupPage() {
     setInfoMessage("");
   }
 
-  async function handleGoogleSignUp() {
-    setError("");
-    setIsGoogleLoading(true);
-
-    if (!supabase) {
-      setError("Still loading. Please try again.");
-      setIsGoogleLoading(false);
-      return;
-    }
-
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
-
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(getPostAuthPath())}`
-      }
-    });
-
-    if (oauthError) {
-      setError(oauthError.message);
-      setIsGoogleLoading(false);
-    }
-  }
-
   return (
     <AuthShell>
       <div className="auth-card">
@@ -261,14 +234,12 @@ export default function SignupPage() {
               <span>or</span>
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleSignUp}
-              className="btn btn-ghost btn-block btn-google"
-              disabled={isGoogleLoading || !ready}
-            >
-              {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
-            </button>
+            <GoogleSignInButton
+              supabase={supabase}
+              ready={ready}
+              nextPath={getPostAuthPath()}
+              onError={setError}
+            />
           </>
         ) : (
           <>

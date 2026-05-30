@@ -216,6 +216,26 @@ export function IconArrowRight(props) {
   );
 }
 
+export function IconExternalLink(props) {
+  return (
+    <Svg {...props}>
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </Svg>
+  );
+}
+
+export function IconDownload(props) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3v10" />
+      <path d="m8 9 4 4 4-4" />
+      <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+    </Svg>
+  );
+}
+
 export function IconStackNext(props) {
   return (
     <Svg {...props} fill="currentColor" stroke="none">

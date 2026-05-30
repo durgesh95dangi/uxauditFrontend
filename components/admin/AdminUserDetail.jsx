@@ -8,8 +8,11 @@ import AdminPageHeader from "./AdminPageHeader.jsx";
 import AdminUserModal from "./AdminUserModal.jsx";
 import {
   JobsTable,
+  PlanBadge,
   adminFetch,
   formatDate,
+  formatDateOnly,
+  formatUsd,
   handleAdminForbidden
 } from "./adminShared.jsx";
 
@@ -124,7 +127,7 @@ export default function AdminUserDetail({ userId }) {
         title={user?.email || "User details"}
         subtitle={
           user
-            ? `${user.fullName || "Registered user"} · ${user.auditCount ?? 0} audits`
+            ? `${user.fullName || "Registered user"} · ${user.planLabel || "Free"} plan · ${user.auditCount ?? 0} audits`
             : "Loading user profile"
         }
         onRefresh={loadData}
@@ -168,12 +171,33 @@ export default function AdminUserDetail({ userId }) {
               <strong>{user.email}</strong>
             </div>
             <div className="admin-detail-card">
-              <span className="admin-detail-label">Provider</span>
-              <strong>{user.provider}</strong>
+              <span className="admin-detail-label">Plan</span>
+              <strong>
+                <PlanBadge
+                  planLabel={user.planLabel}
+                  isActivePaid={user.isActivePaid}
+                />
+              </strong>
+            </div>
+            <div className="admin-detail-card">
+              <span className="admin-detail-label">MRR contribution</span>
+              <strong>{formatUsd(user.mrrUsd ?? 0)}</strong>
             </div>
             <div className="admin-detail-card">
               <span className="admin-detail-label">Joined</span>
               <strong>{formatDate(user.createdAt)}</strong>
+            </div>
+            <div className="admin-detail-card">
+              <span className="admin-detail-label">Plan purchased</span>
+              <strong>{formatDate(user.planSubscribedAt)}</strong>
+            </div>
+            <div className="admin-detail-card">
+              <span className="admin-detail-label">Paddle status</span>
+              <strong>{user.paddleStatus || "—"}</strong>
+            </div>
+            <div className="admin-detail-card">
+              <span className="admin-detail-label">Provider</span>
+              <strong>{user.provider}</strong>
             </div>
             <div className="admin-detail-card">
               <span className="admin-detail-label">Last sign-in</span>
@@ -187,6 +211,12 @@ export default function AdminUserDetail({ userId }) {
               <span className="admin-detail-label">Failed audits</span>
               <strong>{user.auditsFailed ?? 0}</strong>
             </div>
+            {user.paddleSubscriptionId && (
+              <div className="admin-detail-card admin-detail-card--wide">
+                <span className="admin-detail-label">Paddle subscription</span>
+                <strong className="admin-detail-mono">{user.paddleSubscriptionId}</strong>
+              </div>
+            )}
           </div>
         </section>
       )}

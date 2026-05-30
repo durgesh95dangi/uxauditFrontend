@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
+import GoogleSignInButton from "../../../components/auth/GoogleSignInButton.jsx";
 import AuthShell from "../../../components/layout/AuthShell.jsx";
 import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
@@ -17,11 +18,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setResetSuccess(params.get("reset") === "success");
+
+    const authError = params.get("error");
+    if (authError) {
+      setError(decodeURIComponent(authError.replace(/\+/g, " ")));
+    }
   }, []);
 
   function getRedirectPath() {
@@ -58,32 +62,6 @@ export default function LoginPage() {
 
     router.push(getRedirectPath());
     router.refresh();
-  }
-
-  async function handleGoogleSignIn() {
-    setError("");
-    setIsGoogleLoading(true);
-
-    if (!supabase) {
-      setError("Still loading. Please try again.");
-      setIsGoogleLoading(false);
-      return;
-    }
-
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
-
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${origin}/auth/callback?next=/dashboard`
-      }
-    });
-
-    if (oauthError) {
-      setError(oauthError.message);
-      setIsGoogleLoading(false);
-    }
   }
 
   return (
@@ -139,14 +117,12 @@ export default function LoginPage() {
           <span>or</span>
         </div>
 
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          className="btn btn-ghost btn-block btn-google"
-          disabled={isGoogleLoading || !ready}
-        >
-          {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
-        </button>
+        <GoogleSignInButton
+          supabase={supabase}
+          ready={ready}
+          nextPath={getRedirectPath()}
+          onError={setError}
+        />
 
         {configError && (
           <p className="auth-result error" role="alert">

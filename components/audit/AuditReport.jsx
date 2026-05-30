@@ -6,6 +6,7 @@ import IssueRow from "./IssueRow.jsx";
 import PageToolbar from "../layout/PageToolbar.jsx";
 import ReportCoverHero from "./ReportCoverHero.jsx";
 import ReportMeta from "./ReportMeta.jsx";
+import { IconDownload, IconExternalLink } from "../landing/LandingIcons.jsx";
 
 const SEVERITY_RANK = { critical: 0, high: 1, medium: 2, low: 3 };
 
@@ -84,7 +85,7 @@ export default function AuditReport({
   jobId,
   onBackToReports,
   reportEndpoint,
-  backLabel = "← Back to reports",
+  backLabel = "← Back",
   renderAfterToolbar = null
 }) {
   const [report, setReport] = useState(null);
@@ -183,7 +184,7 @@ export default function AuditReport({
             </button>
             {typeof onBackToReports === "function" && (
               <button type="button" className="btn btn-ghost" onClick={onBackToReports}>
-                ← Back to reports
+                ← Back
               </button>
             )}
           </div>
@@ -198,22 +199,30 @@ export default function AuditReport({
 
   return (
     <div className="report-shell">
-      <PageToolbar onBack={onBackToReports} backLabel={backLabel}>
+      <PageToolbar
+        className="page-toolbar--report"
+        onBack={onBackToReports}
+        backLabel={backLabel}
+      >
         <a
           href={job?.url || "#"}
-          className="btn btn-ghost btn-sm"
+          className="btn btn-ghost btn-sm page-toolbar-icon-btn"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Open site"
+          title="Open site"
         >
-          Open site
+          <IconExternalLink size={18} />
         </a>
         <button
           type="button"
-          className="btn btn-ghost btn-sm report-pdf"
+          className="btn btn-ghost btn-sm page-toolbar-icon-btn report-pdf"
           onClick={handleDownloadPdf}
           disabled={pdfLoading}
+          aria-label={pdfLoading ? "Generating PDF" : "Download PDF"}
+          title={pdfLoading ? "Generating PDF" : "Download PDF"}
         >
-          {pdfLoading ? "PDF…" : "Download PDF"}
+          <IconDownload size={18} />
         </button>
       </PageToolbar>
 

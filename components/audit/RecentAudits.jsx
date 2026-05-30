@@ -37,6 +37,46 @@ function StatusBadge({ status }) {
   );
 }
 
+function formatIssueCount(job) {
+  if (job.status !== "done") return "—";
+
+  const count = job.issue_count;
+  if (count == null || Number.isNaN(Number(count))) return "—";
+
+  const n = Number(count);
+  return n === 1 ? "1 issue" : `${n} issues`;
+}
+
+function formatStatusLabel(status) {
+  if (status === "done") return "Success";
+  return STATUS_CONFIG[status]?.label || status || "—";
+}
+
+function MobileAuditCardDetails({ job }) {
+  return (
+    <dl className="recent-audit-card-details">
+      <div className="recent-audit-card-detail">
+        <dt>Status</dt>
+        <dd className={`recent-audit-card-status recent-audit-card-status--${job.status || "unknown"}`}>
+          {formatStatusLabel(job.status)}
+        </dd>
+      </div>
+      <div className="recent-audit-card-detail">
+        <dt>Issues found</dt>
+        <dd>{formatIssueCount(job)}</dd>
+      </div>
+      <div className="recent-audit-card-detail">
+        <dt>Date</dt>
+        <dd>
+          <time dateTime={job.created_at || undefined}>
+            {formatDate(job.created_at)}
+          </time>
+        </dd>
+      </div>
+    </dl>
+  );
+}
+
 function AuditJobActions({
   job,
   retryingId,
@@ -167,15 +207,7 @@ export default function RecentAudits({ userId, onViewReport, onViewProgress }) {
                 <p className="recent-audit-card-url" title={job.url || ""}>
                   {job.url || "—"}
                 </p>
-                <div className="recent-audit-card-meta">
-                  <StatusBadge status={job.status} />
-                  <time
-                    className="recent-audit-card-date"
-                    dateTime={job.created_at || undefined}
-                  >
-                    {formatDate(job.created_at)}
-                  </time>
-                </div>
+                <MobileAuditCardDetails job={job} />
               </div>
               <div className="recent-audit-card-action">
                 <AuditJobActions

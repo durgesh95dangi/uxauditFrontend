@@ -1,7 +1,9 @@
-import SiteNav from "../../components/layout/SiteNav.jsx";
-import SiteFooter from "../../components/layout/SiteFooter.jsx";
-import PricingSection from "../../components/landing/PricingSection.jsx";
+import { redirect } from "next/navigation";
+import { isSuperadmin } from "../../lib/auth/superadmin.js";
+import { getSupabaseServerClient } from "../../lib/supabase/server.js";
+import { toSafeUser } from "../../lib/user/safeUser.js";
 import { createPageMetadata } from "../../lib/metadata.js";
+import PricingPageClient from "./PricingPageClient.jsx";
 
 export const dynamic = "force-dynamic";
 
@@ -12,14 +14,15 @@ export const metadata = createPageMetadata({
   path: "/pricing"
 });
 
-export default function PricingPage() {
-  return (
-    <div className="page-shell">
-      <SiteNav minimal />
-      <main>
-        <PricingSection withAnchor={false} />
-      </main>
-      <SiteFooter />
-    </div>
-  );
+export default async function PricingPage() {
+  const supabase = await getSupabaseServerClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (user && isSuperadmin(user)) {
+    redirect("/admin");
+  }
+
+  return <PricingPageClient user={toSafeUser(user)} />;
 }

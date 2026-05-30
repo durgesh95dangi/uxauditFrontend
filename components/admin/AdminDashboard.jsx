@@ -6,6 +6,7 @@ import AdminPageHeader from "./AdminPageHeader.jsx";
 import {
   SeverityCard,
   StatCard,
+  formatUsd,
   handleAdminForbidden
 } from "./adminShared.jsx";
 
@@ -35,12 +36,13 @@ export default function AdminDashboard() {
   }, [loadData]);
 
   const bugs = stats?.bugsBySeverity || {};
+  const billing = stats?.billing || {};
 
   return (
     <div className="admin-page">
       <AdminPageHeader
         title="Dashboard"
-        subtitle="Audit runs and bug findings across UXAuditX"
+        subtitle="Revenue, users, and audit activity across UXAuditX"
         onRefresh={loadData}
         loading={loading}
       />
@@ -50,6 +52,49 @@ export default function AdminDashboard() {
           {error}
         </p>
       )}
+
+      <section className="dashboard-panel admin-section-panel" aria-label="Business metrics">
+        <h2 className="admin-section-title">Business</h2>
+        <div className="admin-stats-grid">
+          <StatCard
+            label="MRR"
+            value={loading ? "…" : formatUsd(billing.mrrUsd ?? 0)}
+            tone="revenue"
+          />
+          <StatCard
+            label="Revenue this month"
+            value={
+              loading
+                ? "…"
+                : billing.revenueThisMonthUsd != null
+                  ? formatUsd(billing.revenueThisMonthUsd)
+                  : "—"
+            }
+            tone="revenue"
+          />
+          <StatCard
+            label="Registrations this month"
+            value={loading ? "…" : billing.registrationsThisMonth ?? 0}
+          />
+          <StatCard
+            label="Lifetime users"
+            value={loading ? "…" : billing.lifetimeUsers ?? 0}
+          />
+        </div>
+        {!loading && stats && (
+          <p className="admin-section-meta">
+            {billing.activePaidUsers ?? 0} active paid users ·{" "}
+            {billing.planCounts?.founder ?? 0} Founder ·{" "}
+            {billing.planCounts?.agency ?? 0} Agency ·{" "}
+            {billing.planCounts?.free ?? 0} Free
+            {billing.newPaidThisMonth > 0 &&
+              ` · ${billing.newPaidThisMonth} new paid this month`}
+            {billing.paddleConfigured && !billing.paddleMetricsAvailable && (
+              <> · Paddle metrics unavailable (using calculated MRR)</>
+            )}
+          </p>
+        )}
+      </section>
 
       <section className="dashboard-panel admin-section-panel" aria-label="Run statistics">
         <h2 className="admin-section-title">Audit runs</h2>
@@ -99,7 +144,7 @@ export default function AdminDashboard() {
         </div>
         {!loading && stats && (
           <p className="admin-section-meta">
-            {stats.totalBugs ?? 0} total bugs found · {stats.totalUsers ?? 0} registered users
+            {stats.totalBugs ?? 0} total bugs found across all audits
           </p>
         )}
       </section>

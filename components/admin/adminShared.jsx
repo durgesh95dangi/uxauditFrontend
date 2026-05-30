@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { formatUsd } from "../../lib/billing/planRevenue.js";
 
 export const STATUS_CLASS = {
   pending: "ra-status ra-status-pending",
@@ -43,6 +44,35 @@ export async function adminFetch(url, options = {}) {
     throw new Error(body?.error || "Request failed");
   }
   return body;
+}
+
+export function formatDateOnly(iso) {
+  if (!iso) return "—";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+export { formatUsd };
+
+export function PlanBadge({ planLabel, isActivePaid = true }) {
+  const label = planLabel || "Free";
+  const tone =
+    label === "Agency" ? "agency" : label === "Founder" ? "founder" : "free";
+
+  return (
+    <span
+      className={`admin-plan-badge admin-plan-badge--${tone}${
+        isActivePaid ? "" : " admin-plan-badge--inactive"
+      }`}
+    >
+      {label}
+    </span>
+  );
 }
 
 export function StatCard({ label, value, tone }) {

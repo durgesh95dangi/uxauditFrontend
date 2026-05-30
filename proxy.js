@@ -2,6 +2,25 @@ import { NextResponse } from "next/server";
 import { isSuperadmin } from "./lib/auth/superadmin.js";
 import { updateSession } from "./lib/supabase/middleware.js";
 
+const MARKETING_PATHS = [
+  "/how-it-works",
+  "/landing-page-audit",
+  "/free-website-audit-tool",
+  "/website-usability-checklist",
+  "/why-is-my-website-not-converting",
+  "/what-is-a-ux-audit"
+];
+
+function getAuthedHomePath(user) {
+  return isSuperadmin(user) ? "/admin" : "/dashboard";
+}
+
+function isMarketingPath(pathname) {
+  return MARKETING_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
+
 export async function proxy(request) {
   const { response, user } = await updateSession(request);
 
@@ -43,16 +62,16 @@ export async function proxy(request) {
       url.pathname = "/pricing";
       url.search = `?plan=${encodeURIComponent(plan)}`;
     } else {
-      url.pathname = isSuperadmin(user) ? "/admin" : "/dashboard";
+      url.pathname = getAuthedHomePath(user);
       url.search = "";
     }
 
     return NextResponse.redirect(url);
   }
 
-  if (pathname === "/" && user) {
+  if (user && (pathname === "/" || isMarketingPath(pathname))) {
     const url = request.nextUrl.clone();
-    url.pathname = isSuperadmin(user) ? "/admin" : "/dashboard";
+    url.pathname = getAuthedHomePath(user);
     url.search = "";
     return NextResponse.redirect(url);
   }
@@ -63,12 +82,20 @@ export async function proxy(request) {
 export const config = {
   matcher: [
     "/",
+    "/pricing",
+    "/how-it-works",
+    "/landing-page-audit",
+    "/free-website-audit-tool",
+    "/website-usability-checklist",
+    "/why-is-my-website-not-converting",
+    "/what-is-a-ux-audit",
     "/dashboard/:path*",
     "/profile/:path*",
     "/admin/:path*",
     "/login",
     "/signup",
     "/forgot-password",
-    "/reset-password"
+    "/reset-password",
+    "/auth/callback"
   ]
 };
