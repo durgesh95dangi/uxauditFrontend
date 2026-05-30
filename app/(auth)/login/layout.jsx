@@ -1,5 +1,7 @@
 import { createPageMetadata } from "../../../lib/metadata.js";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = createPageMetadata({
   title: "Log In",
   description: "Sign in to your UXAuditX account to run website audits and view reports.",

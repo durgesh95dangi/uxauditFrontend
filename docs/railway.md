@@ -30,15 +30,18 @@ If you still see Nixpacks or a custom build command like `playwright install`, s
 
 ## 3. Environment variables
 
-**Variables** tab — add everything from your local `.env`, for example:
+**Variables** tab — add everything from your local `.env`. These are required **before the first deploy** (Next.js reads `NEXT_PUBLIC_*` at **build time**):
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ANTHROPIC_API_KEY`
-- `ANTHROPIC_MODEL` / `ANTHROPIC_MODEL_FAST`
-- R2: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL`
-- Optional: `MAX_CONCURRENT_AUDITS=2`
+| Variable | Required at build |
+|----------|-------------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes |
+| `SUPABASE_SERVICE_ROLE_KEY` | Runtime |
+| `ANTHROPIC_API_KEY` | Runtime |
+| Paddle `NEXT_PUBLIC_*` + server keys | Build + runtime (for pricing checkout) |
+| `ANTHROPIC_MODEL` / `ANTHROPIC_MODEL_FAST` | Runtime |
+| R2: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_BASE_URL` | Runtime |
+| Optional: `MAX_CONCURRENT_AUDITS=2` | Runtime |
 
 Do **not** set `PORT` — Railway injects it. The app listens on `0.0.0.0` via `HOSTNAME` in the Dockerfile.
 
@@ -84,6 +87,7 @@ Build logs should show Docker steps (`FROM mcr.microsoft.com/playwright:v1.60.0-
 | Browser crashes mid-audit | Bump memory to 2 GB+; `--disable-dev-shm-usage` is already in launch args |
 | App won't start | Check all required env vars; view deploy/runtime logs |
 | **Pricing still shows "Coming soon" / Starter & Pro $49** | Production is on an **old deploy**. See [Deploy stuck on old code](#deploy-stuck-on-old-code) below |
+| **`Missing NEXT_PUBLIC_SUPABASE_URL` during build** | Add Supabase `NEXT_PUBLIC_*` vars in Railway **before** deploy, then redeploy |
 
 ---
 
