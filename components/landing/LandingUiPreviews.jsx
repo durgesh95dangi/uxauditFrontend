@@ -30,7 +30,7 @@ export function LandingInputPreview() {
           <h2 className="dashboard-panel-title audit-input-heading">Run an audit</h2>
         </header>
         <p className="dashboard-panel-sub audit-input-sub">
-          Free Starter plan — {MONTHLY_AUDIT_LIMIT} audits per month.
+          Free plan — {MONTHLY_AUDIT_LIMIT} audit per month.
         </p>
         <div className="audit-input-form">
           <input

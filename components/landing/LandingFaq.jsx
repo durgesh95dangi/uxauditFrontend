@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes. The free Starter plan gives you 2 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
+    a: "Yes. The free plan gives you 1 audit per month, screenshots on both devices, and a picture with every issue. No credit card required."
   },
   {
     q: "How is this different from a speed test?",
@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I share the report with my designer?",
-    a: "On Pro, yes — every report has a shareable link. On the free plan, you can take screenshots or export the findings yourself."
+    a: "You can download a PDF on any plan. Shareable report links are coming soon on paid plans."
   }
 ];
 

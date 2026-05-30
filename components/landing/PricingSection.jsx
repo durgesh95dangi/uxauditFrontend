@@ -6,60 +6,26 @@ import {
   IconZap,
   SectionEyebrow
 } from "./LandingIcons.jsx";
+import PricingPlanCta from "../billing/PricingPlanCta.jsx";
+import { PRICING_CUSTOM, PRICING_PLANS } from "../../lib/audit/pricing.js";
+import { isPaddleCheckoutReady } from "../../lib/billing/paddleConfig.js";
 
-const PLANS = [
-  {
-    name: "Starter",
-    price: "Free",
-    period: "",
-    desc: "No credit card needed.",
-    icon: IconStar,
-    tone: "blue",
-    features: [
-      "2 reports a month",
-      "Desktop and phone screenshots",
-      "A picture with every issue",
-      "Email support"
-    ],
-    featured: false,
-    cta: "Get started",
-    href: "/signup"
-  },
-  {
-    name: "Pro",
-    price: "$49",
-    period: "/month",
-    desc: "Best for teams improving their site every week.",
-    icon: IconZap,
-    tone: "violet",
-    features: [
-      "Unlimited reports",
-      "Full details for every issue",
-      "Priority support",
-      "Shareable report links"
-    ],
-    featured: true,
-    comingSoon: true,
-    cta: "Coming soon"
-  },
-  {
-    name: "Agency",
-    price: "Custom",
-    period: "",
-    desc: "For agencies running audits across multiple client sites.",
-    icon: IconUsers,
-    tone: "indigo",
-    features: [
-      "Volume pricing",
-      "Shared workspace (coming soon)",
-      "White-label reports (coming soon)",
-      "Direct support channel"
-    ],
-    featured: false,
-    comingSoon: true,
-    cta: "Coming soon"
-  }
-];
+const PLAN_ICONS = {
+  free: IconStar,
+  founder: IconZap,
+  agency: IconUsers
+};
+
+const PLAN_TONES = {
+  free: "blue",
+  founder: "violet",
+  agency: "indigo"
+};
+
+const PADDLE_PRICES = {
+  founder: process.env.NEXT_PUBLIC_PADDLE_PRICE_FOUNDER || "",
+  agency: process.env.NEXT_PUBLIC_PADDLE_PRICE_AGENCY || ""
+};
 
 export default function PricingSection({ withAnchor = true }) {
   return (
@@ -72,51 +38,71 @@ export default function PricingSection({ withAnchor = true }) {
           <SectionEyebrow icon={IconStar} center>
             Plans
           </SectionEyebrow>
-          <h2 className="section-title">Pricing that makes sense</h2>
+          <h2 className="section-title">Pricing that scales with you</h2>
+          <p className="section-lead">
+            Start free, upgrade when you are auditing more sites every month.
+          </p>
         </div>
+
         <div className="grid pricing-grid section-grid">
-          {PLANS.map((plan) => (
-            <article
-              key={plan.name}
-              className={`span-4 pricing-card${plan.featured ? " pricing-card-featured" : ""}`}
-            >
-              {plan.featured && (
-                <span className="pricing-badge">Recommended</span>
-              )}
-              <IconBadge
-                icon={plan.icon}
-                tone={plan.tone}
-                className="pricing-card-icon"
-              />
-              <h3>{plan.name}</h3>
-              <p className="pricing-price">
-                {plan.price}
-                {plan.period && <span>{plan.period}</span>}
-              </p>
-              <p className="pricing-desc">→ {plan.desc}</p>
-              <ul className="pricing-features">
-                {plan.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-              {plan.comingSoon ? (
-                <button
-                  type="button"
-                  className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
-                  disabled
-                >
-                  {plan.cta}
-                </button>
-              ) : (
-                <Link
-                  href={plan.href}
-                  className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
-                >
-                  {plan.cta}
-                </Link>
-              )}
-            </article>
-          ))}
+          {PRICING_PLANS.map((plan) => {
+            const Icon = PLAN_ICONS[plan.id] || IconStar;
+            const tone = PLAN_TONES[plan.id] || "blue";
+            const priceId = PADDLE_PRICES[plan.id] || "";
+            const checkoutEnabled = isPaddleCheckoutReady(plan.id);
+
+            return (
+              <article
+                key={plan.id}
+                className={`span-4 pricing-card${plan.featured ? " pricing-card-featured" : ""}`}
+              >
+                {plan.featured && (
+                  <span className="pricing-badge">Recommended</span>
+                )}
+                <IconBadge
+                  icon={Icon}
+                  tone={tone}
+                  className="pricing-card-icon"
+                />
+                <h3>{plan.name}</h3>
+                <p className="pricing-price">
+                  {plan.price}
+                  {plan.period && <span>{plan.period}</span>}
+                </p>
+                <p className="pricing-desc">{plan.desc}</p>
+                <p className="pricing-audience">{plan.audience}</p>
+                <ul className="pricing-features">
+                  {plan.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+                {plan.id === "free" ? (
+                  <Link
+                    href={plan.href}
+                    className={`btn btn-block btn-sm ${plan.featured ? "btn-primary" : "btn-secondary"}`}
+                  >
+                    {plan.cta}
+                  </Link>
+                ) : (
+                  <PricingPlanCta
+                    planId={plan.id}
+                    priceId={priceId}
+                    label={plan.checkoutLabel || plan.cta}
+                    featured={plan.featured}
+                    checkoutEnabled={checkoutEnabled}
+                  />
+                )}
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="pricing-custom">
+          <h3 className="pricing-custom-title">{PRICING_CUSTOM.title}</h3>
+          <p className="pricing-custom-body">{PRICING_CUSTOM.body}</p>
+          <a href={PRICING_CUSTOM.href} className="btn btn-secondary btn-sm">
+            {PRICING_CUSTOM.cta}
+          </a>
         </div>
       </div>
     </section>

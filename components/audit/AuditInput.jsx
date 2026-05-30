@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { MONTHLY_AUDIT_LIMIT } from "../../lib/audit/limits.js";
 import { DEMO_SITE } from "../../lib/landing/demoSite.js";
 
 const AUDIT_CHECKS = [
@@ -13,7 +13,16 @@ const AUDIT_CHECKS = [
   "Layout"
 ];
 
-export default function AuditInput({ onJobStart }) {
+function formatLimitCopy(planLabel, monthlyLimit) {
+  if (monthlyLimit == null) {
+    return `${planLabel} plan — unlimited audits. Most jobs finish in under a minute.`;
+  }
+
+  const auditWord = monthlyLimit === 1 ? "audit" : "audits";
+  return `${planLabel} plan — ${monthlyLimit} ${auditWord} per month. Most jobs finish in under a minute.`;
+}
+
+export default function AuditInput({ onJobStart, planLabel = "Free", monthlyLimit = 1 }) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -70,8 +79,13 @@ export default function AuditInput({ onJobStart }) {
         <h1 className="dashboard-panel-title audit-input-heading">Run an audit</h1>
       </header>
       <p className="dashboard-panel-sub audit-input-sub">
-        Free Starter plan — {MONTHLY_AUDIT_LIMIT} audits per month. Most jobs
-        finish in under a minute.
+        {formatLimitCopy(planLabel, monthlyLimit)}
+        {planLabel === "Free" && (
+          <>
+            {" "}
+            <Link href="/pricing">Upgrade for more</Link>.
+          </>
+        )}
       </p>
 
       <form onSubmit={handleSubmit} className="audit-input-form" noValidate>

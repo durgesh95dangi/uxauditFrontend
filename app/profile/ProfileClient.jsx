@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { getSupabaseBrowserClient } from "../../lib/supabase/client.js";
@@ -247,6 +248,26 @@ export default function ProfileClient({ user }) {
               <div className="profile-row">
                 <span className="profile-row-label">Email</span>
                 <span className="profile-row-value">{user.email || "—"}</span>
+              </div>
+
+              <div className="profile-row">
+                <span className="profile-row-label">Plan</span>
+                <span className="profile-row-value profile-plan-value">
+                  <span>{user.planLabel || "Free"}</span>
+                  {user.monthlyAuditLimit != null ? (
+                    <span className="profile-plan-detail">
+                      {user.monthlyAuditLimit}{" "}
+                      {user.monthlyAuditLimit === 1 ? "audit" : "audits"} per month
+                    </span>
+                  ) : (
+                    <span className="profile-plan-detail">Unlimited audits</span>
+                  )}
+                  {user.planLabel !== "Agency" && !user.isSuperadmin && (
+                    <Link href="/pricing" className="profile-plan-link">
+                      {user.planLabel === "Free" ? "Upgrade plan" : "Change plan"}
+                    </Link>
+                  )}
+                </span>
               </div>
 
               <div className="profile-row">

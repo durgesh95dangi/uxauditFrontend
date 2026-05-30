@@ -123,7 +123,8 @@ export default function RecentAudits({ userId, onViewReport, onViewProgress }) {
                   <td>
                     <StatusBadge status={status} />
                   </td>
-                  <td className="ra-date">{formatDate(job.created_at)}</td>                  <td className="ra-action">
+                  <td className="ra-date">{formatDate(job.created_at)}</td>
+                  <td className="ra-action">
                     {status === "done" && (
                       <button
                         type="button"

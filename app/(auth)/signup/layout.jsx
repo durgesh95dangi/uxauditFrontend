@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createPageMetadata } from "../../../lib/metadata.js";
 
 export const metadata = createPageMetadata({
@@ -8,5 +9,5 @@ export const metadata = createPageMetadata({
 });
 
 export default function SignupLayout({ children }) {
-  return children;
+  return <Suspense fallback={null}>{children}</Suspense>;
 }

@@ -53,7 +53,7 @@ export default function OrbiSolutionSection() {
               Get free website review
             </Link>
             <p className="orbi-solution-note">
-              {MONTHLY_AUDIT_LIMIT} free reviews per month · No credit card
+              {MONTHLY_AUDIT_LIMIT} free audit per month · No credit card
             </p>
           </div>
         </div>

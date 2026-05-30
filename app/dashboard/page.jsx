@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSupabaseServerClient } from "../../lib/supabase/server.js";
 import { createPageMetadata } from "../../lib/metadata.js";
@@ -23,5 +24,9 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  return <DashboardClient user={toSafeUser(user)} />;
+  return (
+    <Suspense fallback={null}>
+      <DashboardClient user={toSafeUser(user)} />
+    </Suspense>
+  );
 }

@@ -71,7 +71,7 @@ const faqSchema = {
       name: "Is UXAuditX free?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free Starter plan gives you 3 reports per month, screenshots on both devices, and a picture with every issue. No credit card required."
+        text: "Yes. The free plan gives you 1 audit per month, screenshots on both devices, and a picture with every issue. No credit card required."
       }
     },
     {
@@ -134,7 +134,7 @@ const WHY_CHOOSE = [
   },
   {
     title: "Free to start",
-    body: "Three audits a month, no credit card, no catch.",
+    body: "One free audit every month, no credit card, no catch.",
     icon: IconStar,
     tone: "amber"
   }

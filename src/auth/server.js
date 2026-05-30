@@ -19,7 +19,7 @@ import {
 import {
   getMonthlyAuditLimitForUser
 } from "../../lib/audit/plans.js";
-import { monthlyLimitPayload } from "../../lib/audit/limits.js";
+import { monthlyLimitPayloadForUser } from "../../lib/audit/limits.js";
 import { runAudit } from "../../lib/engine/runner.js";
 
 dotenv.config();
@@ -221,7 +221,7 @@ app.post("/audit/start", async (req, res) => {
 
   const monthlyLimit = getMonthlyAuditLimitForUser(user);
   if (monthlyLimit != null && auditsThisMonth >= monthlyLimit) {
-    return res.status(429).json(monthlyLimitPayload(auditsThisMonth, monthlyLimit));
+    return res.status(429).json(monthlyLimitPayloadForUser(user, auditsThisMonth));
   }
 
   let job;

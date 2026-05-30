@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client";
@@ -10,6 +10,7 @@ import PasswordInput from "../../../components/layout/PasswordInput.jsx";
 
 export default function SignupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = getSupabaseBrowserClient();
 
   const [step, setStep] = useState("credentials");
@@ -30,7 +31,14 @@ export default function SignupPage() {
       });
     }
 
-    router.push("/dashboard");
+    const redirectPath = searchParams.get("redirect");
+    const plan = searchParams.get("plan");
+    const nextPath =
+      redirectPath === "/pricing" || plan === "founder" || plan === "agency"
+        ? "/pricing"
+        : "/dashboard";
+
+    router.push(nextPath);
     router.refresh();
   }
 

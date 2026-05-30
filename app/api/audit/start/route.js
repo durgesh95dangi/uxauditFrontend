@@ -4,7 +4,7 @@ import { getSupabaseServerClient } from "../../../../lib/supabase/server.js";
 import {
   getMonthlyAuditLimitForUser
 } from "../../../../lib/audit/plans.js";
-import { monthlyLimitPayload } from "../../../../lib/audit/limits.js";
+import { monthlyLimitPayloadForUser } from "../../../../lib/audit/limits.js";
 import { countUserAuditsThisMonth, createJob } from "../../../../lib/engine/storage/db.js";
 import { runAudit } from "../../../../lib/engine/runner.js";
 import { enqueue } from "../../../../lib/engine/queue/limiter.js";
@@ -82,7 +82,7 @@ export async function POST(request) {
 
   const monthlyLimit = getMonthlyAuditLimitForUser(user);
   if (monthlyLimit != null && auditsThisMonth >= monthlyLimit) {
-    return jsonResponse(monthlyLimitPayload(auditsThisMonth, monthlyLimit), 429);
+    return jsonResponse(monthlyLimitPayloadForUser(user, auditsThisMonth), 429);
   }
 
   let job;

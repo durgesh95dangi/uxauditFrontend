@@ -13,7 +13,7 @@ export const metadata = createAbsoluteTitleMetadata({
 const FAQ_ITEMS = [
   {
     q: "Is UXAuditX really free?",
-    a: "Yes. The Starter plan includes 2 audits per month with desktop and mobile screenshots, a picture with every issue, and email support. No credit card required to sign up."
+    a: "Yes. The free plan includes 1 audit per month with desktop and mobile screenshots, a picture with every issue, and email support. No credit card required to sign up."
   },
   {
     q: "What does the free website audit check?",
@@ -86,7 +86,7 @@ export default function FreeWebsiteAuditToolPage() {
             <li>Issues ranked by severity — critical problems first</li>
             <li>A picture pointing to exactly where each issue is</li>
             <li>Plain-English fix suggestions, not vague advice</li>
-            <li>2 reports per month on the free Starter plan</li>
+            <li>1 audit per month on the free plan</li>
           </ul>
         </GuideSection>
 
@@ -125,12 +125,14 @@ export default function FreeWebsiteAuditToolPage() {
           </p>
         </GuideSection>
 
-        <GuideSection title="Free vs Pro">
+        <GuideSection title="Free vs paid plans">
           <p>
-            The free Starter plan covers most solo founders and small teams — 2
-            audits per month with full screenshots and issue details.{" "}
-            <Link href="/pricing">Pro</Link> adds unlimited reports and shareable
-            links if you need to send findings to a designer or client.
+            The free plan is enough to test UXAuditX on one site — 1 audit per
+            month with full screenshots and issue details.{" "}
+            <Link href="/pricing">Founder ($19/mo)</Link> includes 5 audits per
+            month for founders running multiple sites.{" "}
+            <Link href="/pricing">Agency ($199/mo)</Link> includes 50 audits for
+            client work. Need more? Contact us for custom pricing.
           </p>
         </GuideSection>
 

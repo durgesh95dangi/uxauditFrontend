@@ -23,6 +23,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.99.0",
     "@aws-sdk/client-s3": "^3.1055.0",
+    "@paddle/paddle-js": "^1.6.4",
+    "@paddle/paddle-node-sdk": "^3.8.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.2",
     "dotenv": "^17.4.2",

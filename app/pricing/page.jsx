@@ -4,9 +4,9 @@ import PricingSection from "../../components/landing/PricingSection.jsx";
 import { createPageMetadata } from "../../lib/metadata.js";
 
 export const metadata = createPageMetadata({
-  title: "Pricing — Free, Pro & Agency Plans",
+  title: "Pricing — Free, Founder & Agency Plans",
   description:
-    "Start free with 2 audits per month. Upgrade to Pro for unlimited reports and shareable links. No credit card needed.",
+    "Start free with 1 audit per month. Founder plan ($19/mo) includes 5 audits. Agency plan ($199/mo) includes 50 audits. Custom pricing available.",
   path: "/pricing"
 });
 
