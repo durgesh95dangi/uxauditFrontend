@@ -31,7 +31,8 @@ export default function SiteNav({
   showMenuButton = false,
   menuOpen = false,
   onMenuToggle,
-  fullWidth = false
+  fullWidth = false,
+  interactionDisabled = false
 }) {
   const logoHref = brandHref || (user ? "/dashboard" : "/");
   const [isCompactNav, setIsCompactNav] = useState(false);
@@ -45,6 +46,12 @@ export default function SiteNav({
   const avatarUrl = user ? resolveAvatarUrl(user) : null;
   const profileName = user ? resolveFullName(user) : "";
   const profileInitial = user ? resolveInitial(user) : "";
+
+  useEffect(() => {
+    if (interactionDisabled) {
+      setMobileMenuOpen(false);
+    }
+  }, [interactionDisabled]);
 
   useEffect(() => {
     const media = window.matchMedia(TABLET_MOBILE_QUERY);
@@ -85,6 +92,7 @@ export default function SiteNav({
   }
 
   function toggleMobileMenu() {
+    if (interactionDisabled) return;
     setMobileMenuOpen((open) => !open);
   }
 
@@ -96,7 +104,10 @@ export default function SiteNav({
   return (
     <>
       <header
-        className={`nav-bar${mobileMenuOpen ? " nav-bar--menu-open" : ""}`}
+        className={`nav-bar${mobileMenuOpen ? " nav-bar--menu-open" : ""}${
+          interactionDisabled ? " nav-bar--disabled" : ""
+        }`}
+        aria-busy={interactionDisabled || undefined}
       >
         <div
           className={`nav-bar-inner${
@@ -120,18 +131,32 @@ export default function SiteNav({
           )}
 
           {!hideBrand && !showMenuButton && (
-            <BrandLogo href={logoHref} className="nav-brand" />
+            <BrandLogo
+              href={logoHref}
+              className="nav-brand"
+              disabled={interactionDisabled}
+            />
           )}
 
-          <nav className="nav-links" aria-label="Main">
+          <nav className="nav-links" aria-label="Main" aria-hidden={interactionDisabled || undefined}>
             {showDesktopLinks &&
               desktopLinks.map((link) =>
                 link.href.startsWith("/#") ? (
-                  <a key={link.href} href={link.href}>
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    tabIndex={interactionDisabled ? -1 : undefined}
+                    aria-disabled={interactionDisabled || undefined}
+                  >
                     {link.label}
                   </a>
                 ) : (
-                  <Link key={link.href} href={link.href}>
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    tabIndex={interactionDisabled ? -1 : undefined}
+                    aria-disabled={interactionDisabled || undefined}
+                  >
                     {link.label}
                   </Link>
                 )
@@ -147,10 +172,20 @@ export default function SiteNav({
               />
             ) : !user ? (
               <div className="nav-actions-guest">
-                <Link href="/login" className="btn btn-nav-ghost">
+                <Link
+                  href="/login"
+                  className="btn btn-nav-ghost"
+                  tabIndex={interactionDisabled ? -1 : undefined}
+                  aria-disabled={interactionDisabled || undefined}
+                >
                   Log In
                 </Link>
-                <Link href="/signup" className="btn btn-nav-primary">
+                <Link
+                  href="/signup"
+                  className="btn btn-nav-primary"
+                  tabIndex={interactionDisabled ? -1 : undefined}
+                  aria-disabled={interactionDisabled || undefined}
+                >
                   Start Free
                 </Link>
               </div>
@@ -162,6 +197,7 @@ export default function SiteNav({
               type="button"
               className="nav-mobile-toggle btn btn-ghost btn-sm"
               onClick={toggleMobileMenu}
+              disabled={interactionDisabled}
               aria-expanded={mobileMenuOpen}
               aria-controls="site-mobile-nav"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
@@ -172,7 +208,7 @@ export default function SiteNav({
         </div>
       </header>
 
-      {showSiteNavMenu && isCompactNav && mobileMenuOpen && (
+      {showSiteNavMenu && isCompactNav && mobileMenuOpen && !interactionDisabled && (
         <>
           <button
             type="button"

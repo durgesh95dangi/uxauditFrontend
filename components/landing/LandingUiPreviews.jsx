@@ -7,7 +7,8 @@ import {
   DEMO_ABOVE_FOLD,
   DEMO_ISSUES,
   DEMO_JOB,
-  DEMO_SUMMARY
+  DEMO_SUMMARY,
+  mapIssuesForPreview
 } from "../../lib/landing/demoReport.js";
 
 const AUDIT_CHECKS = ["Hero", "Navigation", "CTAs", "Trust", "Mobile", "Layout"];
@@ -159,7 +160,7 @@ export function FeatureShowcasePreview({ type }) {
 }
 
 export function LandingReportPreview({ issues = DEMO_ISSUES, compact = false }) {
-  const shownScreens = new Set();
+  const mappedIssues = mapIssuesForPreview(issues);
 
   return (
     <div
@@ -170,29 +171,22 @@ export function LandingReportPreview({ issues = DEMO_ISSUES, compact = false }) 
       <div className="report-shell report-shell--landing">
         <ReportCoverHero job={DEMO_JOB} summary={DEMO_SUMMARY} />
         <div className="report-body--minimal">
-          <ReportMeta summary={DEMO_SUMMARY} aboveFold={DEMO_ABOVE_FOLD} />
+          <ReportMeta aboveFold={DEMO_ABOVE_FOLD} />
           <section className="report-issues" aria-label="Sample audit issues">
             <h2 className="report-issues-heading">
               Issues
               <span className="report-issues-count">{DEMO_SUMMARY.totalIssues}</span>
             </h2>
             <div className="issue-list issue-list--minimal">
-              {issues.map((issue, idx) => {
-                const screenKey = `${issue.section_label}-${issue.viewport || "desktop"}`;
-                const showScreenshot =
-                  issue.screenshot_url && !shownScreens.has(screenKey);
-                if (showScreenshot) shownScreens.add(screenKey);
-
-                return (
-                  <IssueRow
-                    key={`${issue.title}-${idx}`}
-                    issue={issue}
-                    index={idx}
-                    screenshotUrl={showScreenshot ? issue.screenshot_url : null}
-                    interactive={false}
-                  />
-                );
-              })}
+              {mappedIssues.map(({ issue, index, screenshotUrl, key }) => (
+                <IssueRow
+                  key={key}
+                  issue={issue}
+                  index={index}
+                  screenshotUrl={screenshotUrl}
+                  interactive={false}
+                />
+              ))}
             </div>
           </section>
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import PageToolbar from "../layout/PageToolbar.jsx";
+import { DEMO_SITE } from "../../lib/landing/demoSite.js";
 
 const STEPS = [
   { id: 0, label: "Getting started", minSeconds: 0 },
@@ -156,12 +157,19 @@ function ProgressHeroPreview({
   );
 }
 
-export default function AuditProgress({ jobId, onComplete, onBackToReports }) {
-  const [status, setStatus] = useState("pending");
+export default function AuditProgress({
+  jobId,
+  onComplete,
+  onBackToReports,
+  demoAuditUrl,
+  demoDurationMs = 12000
+}) {
+  const isDemo = Boolean(demoAuditUrl);
+  const [status, setStatus] = useState(isDemo ? "running" : "pending");
   const [currentStep, setCurrentStep] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [error, setError] = useState(null);
-  const [auditUrl, setAuditUrl] = useState("");
+  const [auditUrl, setAuditUrl] = useState(demoAuditUrl || "");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [previewLabel, setPreviewLabel] = useState(null);
   const [capturedSections, setCapturedSections] = useState([]);
@@ -179,7 +187,73 @@ export default function AuditProgress({ jobId, onComplete, onBackToReports }) {
   }, [onComplete]);
 
   useEffect(() => {
-    if (!jobId) return undefined;
+    if (!demoAuditUrl) return undefined;
+
+    finishedRef.current = false;
+    serverDrivenRef.current = true;
+    previewSeenRef.current = false;
+    setAuditUrl(demoAuditUrl);
+    setStatus("running");
+    setCurrentStep(0);
+    setElapsedSeconds(0);
+    setError(null);
+    setPreviewUrl(null);
+    setPreviewLabel(null);
+    setCapturedSections([]);
+
+    const demoSections = DEMO_SITE.sections;
+    const startedAt = Date.now();
+    const maxVirtualSeconds = STEPS[STEPS.length - 1].minSeconds;
+
+    const demoInterval = setInterval(() => {
+      if (finishedRef.current) return;
+
+      const elapsedMs = Date.now() - startedAt;
+      const elapsedSec = Math.floor(elapsedMs / 1000);
+      const ratio = Math.min(elapsedMs / demoDurationMs, 1);
+      const virtualElapsed = Math.floor(ratio * maxVirtualSeconds);
+
+      setElapsedSeconds(elapsedSec);
+      setCurrentStep(stepForElapsed(virtualElapsed));
+
+      if (ratio >= 0.18) {
+        setPreviewUrl("/landing/finding-hero-cta.svg");
+        setPreviewLabel("Hero");
+        setCapturedSections([{ label: "Hero" }]);
+      }
+      if (ratio >= 0.42) {
+        setCapturedSections([
+          { label: "Hero" },
+          { label: "Features" }
+        ]);
+      }
+      if (ratio >= 0.62) {
+        setCapturedSections(demoSections.map((label) => ({ label })));
+      }
+
+      if (ratio >= 1) {
+        finishedRef.current = true;
+        clearInterval(demoInterval);
+        setCurrentStep(STEPS.length - 1);
+        setStatus("done");
+        completionTimeoutRef.current = setTimeout(() => {
+          onCompleteRef.current?.();
+        }, COMPLETION_DELAY_MS);
+      }
+    }, 200);
+
+    return () => {
+      finishedRef.current = true;
+      clearInterval(demoInterval);
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+        completionTimeoutRef.current = null;
+      }
+    };
+  }, [demoAuditUrl, demoDurationMs]);
+
+  useEffect(() => {
+    if (!jobId || isDemo) return undefined;
 
     finishedRef.current = false;
 
@@ -277,7 +351,7 @@ export default function AuditProgress({ jobId, onComplete, onBackToReports }) {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobId]);
+  }, [jobId, isDemo]);
 
   const totalSteps = STEPS.length;
   const progressPercent = Math.min(

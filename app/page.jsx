@@ -4,9 +4,7 @@ import nextDynamic from "next/dynamic";
 import { FREE_MONTHLY_AUDIT_LIMIT } from "../lib/audit/plans.js";
 import { isSuperadmin } from "../lib/auth/superadmin.js";
 import { getSupabaseServerClient } from "../lib/supabase/server.js";
-import SiteNav from "../components/layout/SiteNav.jsx";
-import SiteFooter from "../components/layout/SiteFooter.jsx";
-import HeroAuditFlow from "../components/landing/HeroAuditFlow.jsx";
+import LandingPageBody from "../components/landing/LandingPageBody.jsx";
 import OrbiSolutionSection from "../components/landing/OrbiSolutionSection.jsx";
 import PricingSection from "../components/landing/PricingSection.jsx";
 import SchemaMarkup from "../components/SchemaMarkup.jsx";
@@ -161,17 +159,8 @@ export default async function LandingPage() {
       <SchemaMarkup schema={softwareApplicationSchema} />
       <SchemaMarkup schema={faqSchema} />
       <SchemaMarkup schema={howItWorksSchema} />
-      <SiteNav />
 
-      <main>
-        <div className="landing-fold landing-fold-orbi">
-          <section className="hero-band hero-band-orbi">
-            <div className="container hero-orbi-container">
-              <HeroAuditFlow />
-            </div>
-          </section>
-        </div>
-
+      <LandingPageBody>
         <OrbiSolutionSection />
 
         <section id="why" className="section-band section-band-soft">
@@ -227,9 +216,7 @@ export default async function LandingPage() {
             </div>
           </div>
         </section>
-      </main>
-
-      <SiteFooter />
+      </LandingPageBody>
     </div>
   );
 }

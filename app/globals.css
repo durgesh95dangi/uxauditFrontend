@@ -793,6 +793,20 @@ p { margin: 0; }
   backdrop-filter: blur(16px) saturate(1.2);
 }
 
+.nav-bar--disabled .nav-bar-inner {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.nav-bar--disabled .nav-bar-inner a,
+.nav-bar--disabled .nav-bar-inner button {
+  cursor: not-allowed;
+}
+
+.brand-logo--disabled {
+  cursor: not-allowed;
+}
+
 .nav-bar-inner {
   width: 100%;
   max-width: var(--grid-max);
@@ -1262,13 +1276,50 @@ p { margin: 0; }
 }
 
 /* Orbi-style hero + solution (heyorbi.com layout) */
-.landing-fold-orbi {
+.landing-fold.landing-fold-orbi {
   min-height: auto;
   background: #000;
 }
 
+.landing-main--audit-focus {
+  min-height: calc(100svh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.landing-main--audit-focus .landing-fold-orbi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-main--audit-focus .hero-band-orbi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.landing-main--audit-focus .hero-orbi-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .hero-band-orbi {
-  padding-block: clamp(48px, 8vh, 96px) clamp(40px, 6vh, 72px);
+  padding-block: 100px;
+}
+
+.hero-band-orbi:has(.hero-audit-phase--scan),
+.hero-band-orbi:has(.hero-audit-phase--results) {
+  padding-block: clamp(48px, 6vh, 72px);
+}
+
+.hero-band-orbi:has(.hero-audit-phase--scan) .hero-orbi-container,
+.hero-band-orbi:has(.hero-audit-phase--results) .hero-orbi-container {
+  max-width: 1120px;
 }
 
 .hero-orbi-container {
@@ -1289,7 +1340,7 @@ p { margin: 0; }
 
 .hero-orbi-badge {
   display: inline-block;
-  margin: 0 0 20px;
+  margin: 0 0 14px;
   padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1310,7 +1361,7 @@ p { margin: 0; }
 }
 
 .hero-orbi-lead {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   font-size: clamp(13px, 1.76vw, 14px);
   line-height: 1.65;
   color: rgba(255, 255, 255, 0.58);
@@ -1359,7 +1410,7 @@ p { margin: 0; }
 }
 
 .hero-audit-form {
-  margin-top: 28px;
+  margin-top: 24px;
   width: 100%;
   max-width: 520px;
   margin-inline: auto;
@@ -1370,9 +1421,12 @@ p { margin: 0; }
   align-items: stretch;
   width: 100%;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   background: var(--color-input-bg, rgba(255, 255, 255, 0.06));
-  box-shadow: var(--shadow-input, 0 1px 2px rgba(0, 0, 0, 0.24));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.35);
   overflow: hidden;
 }
 
@@ -1399,8 +1453,10 @@ p { margin: 0; }
 .hero-audit-input-row:focus-within {
   border-color: rgba(96, 165, 250, 0.45);
   box-shadow:
-    0 0 0 1px rgba(96, 165, 250, 0.25),
-    var(--shadow-input, 0 1px 2px rgba(0, 0, 0, 0.24));
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(96, 165, 250, 0.28),
+    0 0 24px rgba(59, 130, 246, 0.18);
 }
 
 .hero-audit-submit {
@@ -1416,11 +1472,32 @@ p { margin: 0; }
 }
 
 .hero-audit-hint {
-  margin: 10px 0 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 12px auto 0;
+  padding: 7px 16px;
+  border-radius: 999px;
   font-size: 12px;
+  font-weight: 500;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.42);
-  text-align: center;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.12);
+}
+
+.hero-audit-hint-strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.hero-audit-hint-sep {
+  margin-inline: 6px;
+  color: rgba(147, 197, 253, 0.75);
 }
 
 .hero-audit-error {
@@ -1431,9 +1508,30 @@ p { margin: 0; }
 }
 
 .hero-audit-phase--scan {
-  max-width: 520px;
-  margin-inline: auto;
-  text-align: center;
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.hero-audit-phase--scan .progress-shell {
+  width: 100%;
+}
+
+.hero-audit-phase--results {
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.hero-audit-report {
+  width: 100%;
+}
+
+.hero-audit-issue-row--blurred {
+  filter: blur(3px);
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
 }
 
 .hero-audit-scan-url {
@@ -8566,6 +8664,10 @@ label.profile-row-label {
 
   .hero-orbi-title {
     font-size: clamp(1.85rem, 9vw, 2.35rem);
+  }
+
+  .hero-band-orbi {
+    padding-block: 50px;
   }
 
   .hero-orbi-btn,
