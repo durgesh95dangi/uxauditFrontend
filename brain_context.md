@@ -129,6 +129,7 @@ The website is styled using CSS custom variables in `app/globals.css` with a hig
 - **Secondary Tones:** `--color-purple-mid: #5C3E94` and `--color-purple-deep: #412B6B`.
 - **Interactive Background:** `<InteractiveBackground />` sets `--mouse-x` and `--mouse-y` dynamically. It applies a dual radial background gradient that merges `#F25912` (orange glow) with purple highlights following the user's cursor.
 - **Hero & Input Heights:** Hero section is set to `min-height: 70svh` to occupy 70% of the viewport. Input forms and action buttons in the hero section are set to `58px` for maximum visibility and ease of interaction.
+- **Testimonials Section:** Testimonials cards reside in `.testimonial-grid` styled with `var(--gradient-card)` backgrounds matching the branding. Individual `.testimonial-card`s have micro-animations (hover translate lift) and `.testimonial-avatar`s styled with brand orange-to-coral gradients. A media query for viewports `<= 960px` reflows the grid layout into a clean single-column stack.
 
 ---
 

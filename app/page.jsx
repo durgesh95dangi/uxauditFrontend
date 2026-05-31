@@ -163,6 +163,58 @@ export default async function LandingPage() {
       <LandingPageBody>
         <OrbiSolutionSection />
 
+        <section id="testimonials" className="section-band">
+          <div className="container">
+            <div className="section-header section-header-center">
+              <SectionEyebrow icon={IconUsers} center>
+                Testimonials
+              </SectionEyebrow>
+              <h2 className="section-title">What conversion-focused teams say</h2>
+            </div>
+
+            <div className="testimonial-grid">
+              <article className="testimonial-card">
+                <p className="testimonial-quote">
+                  &ldquo;We ran UXAuditX on our landing page and found 5 critical CTA issues. Fixed them over the weekend and saw a 22% lift in signups the following week!&rdquo;
+                </p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" aria-hidden="true">SJ</div>
+                  <div>
+                    <h3 className="testimonial-name">Sarah Jenkins</h3>
+                    <p className="testimonial-role">Growth Lead at Optima</p>
+                  </div>
+                </div>
+              </article>
+
+              <article className="testimonial-card">
+                <p className="testimonial-quote">
+                  &ldquo;Hiring a UX consultant usually costs us thousands. This tool gave us a prioritized checklist of visual issues with screenshots in 45 seconds.&rdquo;
+                </p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" aria-hidden="true">DK</div>
+                  <div>
+                    <h3 className="testimonial-name">David K.</h3>
+                    <p className="testimonial-role">Founder, IndieSaaS</p>
+                  </div>
+                </div>
+              </article>
+
+              <article className="testimonial-card">
+                <p className="testimonial-quote">
+                  &ldquo;As a developer, I love that it tells me exactly what to fix instead of giving vague usability scores. The mobile audit is a game-changer.&rdquo;
+                </p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar" aria-hidden="true">MC</div>
+                  <div>
+                    <h3 className="testimonial-name">Marcus Chen</h3>
+                    <p className="testimonial-role">Lead Developer, DevFlow</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section id="why" className="section-band section-band-soft">
           <div className="container">
             <div className="section-header section-header-center">
