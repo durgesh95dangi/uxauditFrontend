@@ -1,5 +1,8 @@
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import Ga4AuthTracker from "../components/analytics/Ga4AuthTracker.jsx";
+import Ga4PageTracker from "../components/analytics/Ga4PageTracker.jsx";
+import GoogleAnalytics from "../components/analytics/GoogleAnalytics.jsx";
 import { SITE_NAME, SITE_URL } from "../lib/metadata.js";
 import "./globals.css";
 
@@ -40,7 +43,14 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className={`${GeistSans.className} antialiased`}>{children}</body>
+      <head>
+        <GoogleAnalytics />
+      </head>
+      <body className={`${GeistSans.className} antialiased`}>
+        <Ga4PageTracker />
+        <Ga4AuthTracker />
+        {children}
+      </body>
     </html>
   );
 }

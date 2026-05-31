@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { resolvePostSignupPath } from "../../../lib/auth/redirects.js";
+import { trackGa4Event } from "../../../lib/analytics/ga4.js";
 import { starterPlanMetadata } from "../../../lib/audit/plans.js";
 import { useSupabase } from "../../../lib/supabase/useSupabase.js";
 import { getSupabaseBrowserClient } from "../../../lib/supabase/client.js";
@@ -35,6 +36,12 @@ export default function SignupPage() {
     if (sessionUser && !sessionUser.user_metadata?.plan) {
       await client.auth.updateUser({
         data: starterPlanMetadata(sessionUser.user_metadata || {})
+      });
+    }
+
+    if (sessionUser?.id) {
+      trackGa4Event("sign_up", {
+        method: sessionUser.app_metadata?.provider === "google" ? "google" : "email"
       });
     }
 
