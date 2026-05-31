@@ -21,12 +21,6 @@ const PUBLIC_NAV_LINKS = [
   { href: "/#faq", label: "FAQ" }
 ];
 
-const AUTHED_NAV_LINKS = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/profile", label: "Profile" }
-];
-
 export default function SiteNav({
   user = null,
   onSignOut,
@@ -44,13 +38,9 @@ export default function SiteNav({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const showSiteNavMenu = !showMenuButton;
-  const drawerLinks = user
-    ? user.isSuperadmin
-      ? AUTHED_NAV_LINKS.filter((link) => link.href !== "/profile")
-      : AUTHED_NAV_LINKS
-    : PUBLIC_NAV_LINKS;
-  const showDesktopLinks = user ? true : !minimal;
-  const desktopLinks = user ? AUTHED_NAV_LINKS : PUBLIC_NAV_LINKS;
+  const drawerLinks = user ? [] : PUBLIC_NAV_LINKS;
+  const showDesktopLinks = !user && !minimal;
+  const desktopLinks = PUBLIC_NAV_LINKS;
   const showHeaderUserMenu = user && !(showSiteNavMenu && isCompactNav);
   const avatarUrl = user ? resolveAvatarUrl(user) : null;
   const profileName = user ? resolveFullName(user) : "";
