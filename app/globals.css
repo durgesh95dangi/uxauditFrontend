@@ -9912,3 +9912,62 @@ label.profile-row-label {
   }
 }
 
+/* =============================================================
+   Interactive Hero Background
+   ============================================================= */
+
+.interactive-bg-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+  --mouse-x: 50%;
+  --mouse-y: 35%;
+  --mouse-opacity: 0.65;
+}
+
+.interactive-bg-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: 
+    radial-gradient(
+      circle 450px at var(--mouse-x) var(--mouse-y),
+      rgba(255, 122, 89, 0.14) 0%,
+      rgba(99, 102, 241, 0.07) 35%,
+      rgba(139, 92, 246, 0.03) 65%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 700px at 50% 10%,
+      rgba(255, 122, 89, 0.05),
+      transparent 75%
+    );
+  opacity: var(--mouse-opacity);
+  transition: opacity 0.4s ease;
+}
+
+.interactive-bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: block;
+}
+
+/* Ensure container elements inside hero layout stack properly */
+.hero-band-orbi {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-orbi-container {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+
