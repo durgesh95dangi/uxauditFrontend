@@ -14,7 +14,9 @@
     "legacy-start": "npm run build:css && node src/index.js",
     "legacy-auth-api": "node src/auth/server.js",
     "auth-api": "node src/auth/server.js",
-    "test": "node src/test.js",
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:smoke": "playwright test e2e/hero-audit.spec.js",
     "setup-db": "node src/storage/setupDB.js",
     "verify": "node src/storage/verify.js",
     "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./public/tailwind.css --minify",
@@ -42,6 +44,7 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/cli": "^4.3.0",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.15",

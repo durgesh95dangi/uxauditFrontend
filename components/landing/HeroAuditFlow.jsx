@@ -111,7 +111,10 @@ export default function HeroAuditFlow() {
 
   if (phase === "scan") {
     return (
-      <div className="hero-audit-phase hero-audit-phase--scan">
+      <div
+        className="hero-audit-phase hero-audit-phase--scan"
+        data-testid="hero-audit-phase-scan"
+      >
         <p className="hero-audit-scan-url">{displayUrl(auditedUrl)}</p>
         <div className="hero-audit-progress-wrap">
           <div className="hero-audit-progress-track">
@@ -136,7 +139,10 @@ export default function HeroAuditFlow() {
 
   if (phase === "results") {
     return (
-      <div className="hero-audit-phase hero-audit-phase--results">
+      <div
+        className="hero-audit-phase hero-audit-phase--results"
+        data-testid="hero-audit-phase-results"
+      >
         <div className="hero-audit-results-head">
           <div className="hero-audit-score-block">
             <div className="hero-audit-score-pill hero-audit-score-pill--warn">
@@ -174,7 +180,10 @@ export default function HeroAuditFlow() {
   }
 
   return (
-    <div className="hero-audit-phase hero-audit-phase--hero">
+    <div
+      className="hero-audit-phase hero-audit-phase--hero"
+      data-testid="hero-audit-phase-hero"
+    >
       <div className="hero-orbi-copy hero-audit-copy">
         <p className="hero-orbi-badge">The solution</p>
         <h1 className="hero-orbi-title">
@@ -189,7 +198,7 @@ export default function HeroAuditFlow() {
         <form className="hero-audit-form" onSubmit={handleSubmit} noValidate>
           <div className="hero-audit-input-row">
             <input
-              type="url"
+              type="text"
               value={urlInput}
               onChange={(event) => setUrlInput(event.target.value)}
               placeholder={DEMO_SITE.urlWithProtocol}
