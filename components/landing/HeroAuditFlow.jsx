@@ -130,6 +130,35 @@ export default function HeroAuditFlow({ onPhaseChange }) {
               </div>
             </div>
           </form>
+
+          <div className="hero-social-proof">
+            <div className="hero-social-avatars">
+              <div className="hero-social-avatar avatar-1">
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64&h=64&q=80"
+                  alt="User"
+                  loading="lazy"
+                />
+              </div>
+              <div className="hero-social-avatar avatar-2">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=64&h=64&q=80"
+                  alt="User"
+                  loading="lazy"
+                />
+              </div>
+              <div className="hero-social-avatar avatar-3">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80"
+                  alt="User"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <span className="hero-social-text">
+              Joined by 100+ users last month
+            </span>
+          </div>
         </div>
 
         <div className="hero-split-right">
