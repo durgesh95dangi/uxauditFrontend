@@ -102,7 +102,7 @@ test.describe("Landing hero audit flow", () => {
     const signupLink = page.getByRole("link", {
       name: "Create free account to unlock"
     });
-    await expect(signupLink).toHaveAttribute("href", "/signup");
+    await expect(signupLink).toHaveAttribute("href", /^\/signup/);
   });
 
   test("shows expected severity mix on visible issue cards", async ({ page }) => {

@@ -141,7 +141,7 @@ export default function LoginPage() {
 
         <p className="auth-helper auth-footer">
           Don&apos;t have an account?{" "}
-          <Link href="/signup">Sign up</Link>
+          <Link href={`/signup?${new URLSearchParams(window.location.search).toString()}`}>Sign up</Link>
         </p>
       </div>
     </AuthShell>

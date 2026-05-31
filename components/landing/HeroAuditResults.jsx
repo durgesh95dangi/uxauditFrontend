@@ -69,7 +69,10 @@ export default function HeroAuditResults({ auditedUrl }) {
             Including page-by-page breakdown, priority fix order, and estimated
             conversion impact for each issue.
           </p>
-          <Link href="/signup" className="btn btn-primary hero-audit-gate-btn">
+          <Link
+            href={`/signup?redirect=/dashboard&url=${encodeURIComponent(auditedUrl)}`}
+            className="btn btn-primary hero-audit-gate-btn"
+          >
             Create free account to unlock
           </Link>
           <p className="hero-audit-gate-fine">Free forever · No credit card needed</p>

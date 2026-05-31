@@ -76,6 +76,39 @@ export default function DashboardClient({ user: initialUser }) {
     };
   }, [router, searchParams, supabase]);
 
+  const urlParam = searchParams.get("url");
+
+  useEffect(() => {
+    if (!urlParam) return;
+
+    const normalized = /^https?:\/\//i.test(urlParam)
+      ? urlParam
+      : `https://${urlParam}`;
+
+    async function autoTrigger() {
+      try {
+        const response = await fetch("/api/audit/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: normalized })
+        });
+        if (response.ok) {
+          const { jobId } = await response.json();
+          handleJobStart(jobId);
+
+          const newParams = new URLSearchParams(searchParams.toString());
+          newParams.delete("url");
+          const queryStr = newParams.toString();
+          router.replace(`/dashboard${queryStr ? `?${queryStr}` : ""}`);
+        }
+      } catch (err) {
+        console.error("Auto trigger audit failed:", err);
+      }
+    }
+
+    autoTrigger();
+  }, [urlParam, searchParams, router]);
+
   function handleJobStart(newJobId) {
     setJobId(newJobId);
     setView("progress");

@@ -309,7 +309,8 @@ export default function SignupPage() {
         )}
 
         <p className="auth-helper auth-footer">
-          Already have an account? <Link href="/login">Sign in</Link>
+          Already have an account?{" "}
+          <Link href={`/login?${searchParams.toString()}`}>Sign in</Link>
         </p>
       </div>
     </AuthShell>
