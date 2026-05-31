@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import AdminConfirmDialog from "./AdminConfirmDialog.jsx";
 import AdminPageHeader from "./AdminPageHeader.jsx";
 import AdminUserModal from "./AdminUserModal.jsx";
-import { adminFetch, formatDate, formatDateOnly, handleAdminForbidden, PlanBadge } from "./adminShared.jsx";
+import { adminFetch, formatDate, formatDateOnly, handleAdminForbidden, PlanBadge, PlanPurchasedIcon } from "./adminShared.jsx";
 
 export default function AdminUsers() {
   const router = useRouter();
@@ -123,7 +123,7 @@ export default function AdminUsers() {
         </header>
 
         <div className="recent-audits-table-wrap">
-          <table className="recent-audits-table admin-table">
+          <table className="recent-audits-table admin-table admin-table--users">
             <thead>
               <tr>
                 <th>Email</th>
@@ -132,9 +132,11 @@ export default function AdminUsers() {
                 <th>Provider</th>
                 <th>Audits</th>
                 <th>Joined</th>
-                <th>Plan purchased</th>
+                <th className="admin-th-icon" aria-label="Plan purchased">
+                  <PlanPurchasedIcon size={13} />
+                </th>
                 <th>Last sign-in</th>
-                <th aria-label="Actions" />
+                <th className="admin-th-actions" aria-label="Actions" />
               </tr>
             </thead>
             <tbody>
@@ -171,9 +173,23 @@ export default function AdminUsers() {
                       )}
                     </td>
                     <td className="admin-date">{formatDateOnly(row.createdAt)}</td>
-                    <td className="admin-date">{formatDateOnly(row.planSubscribedAt)}</td>
-                    <td className="admin-date">{formatDate(row.lastSignInAt)}</td>
-                    <td className="ra-action admin-row-actions">
+                    <td className="admin-plan-purchased-cell">
+                      {row.planSubscribedAt ? (
+                        <span
+                          className="admin-plan-purchased-yes"
+                          title={`Plan purchased ${formatDate(row.planSubscribedAt)}`}
+                          aria-label={`Plan purchased ${formatDateOnly(row.planSubscribedAt)}`}
+                        >
+                          <PlanPurchasedIcon size={14} />
+                        </span>
+                      ) : (
+                        <span className="admin-muted">—</span>
+                      )}
+                    </td>
+                    <td className="admin-date" title={formatDate(row.lastSignInAt)}>
+                      {formatDateOnly(row.lastSignInAt)}
+                    </td>
+                    <td className="admin-row-actions">
                       <Link
                         href={`/admin/users/${row.id}`}
                         className="btn btn-ghost btn-sm"

@@ -6,7 +6,7 @@ import { isSuperadmin } from "../lib/auth/superadmin.js";
 import { getSupabaseServerClient } from "../lib/supabase/server.js";
 import SiteNav from "../components/layout/SiteNav.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
-import HeroOrbiFeed from "../components/landing/HeroOrbiFeed.jsx";
+import HeroAuditFlow from "../components/landing/HeroAuditFlow.jsx";
 import OrbiSolutionSection from "../components/landing/OrbiSolutionSection.jsx";
 import PricingSection from "../components/landing/PricingSection.jsx";
 import SchemaMarkup from "../components/SchemaMarkup.jsx";
@@ -167,33 +167,7 @@ export default async function LandingPage() {
         <div className="landing-fold landing-fold-orbi">
           <section className="hero-band hero-band-orbi">
             <div className="container hero-orbi-container">
-              <div className="hero-orbi-stack">
-                <div className="hero-orbi-copy">
-                  <p className="hero-orbi-badge">The solution</p>
-                  <h1 className="hero-orbi-title">
-                    Turn website visitors into paying customers.
-                  </h1>
-                  <p className="hero-orbi-lead">
-                    We look at your website through your customer&apos;s eyes,
-                    spot what&apos;s frustrating or confusing, and give you an
-                    easy-to-follow report so your team knows exactly what to
-                    fix.
-                  </p>
-                  <div className="hero-orbi-actions">
-                    <Link href="/signup" className="btn btn-primary hero-orbi-btn">
-                      Get free website review
-                    </Link>
-                  </div>
-                  <p className="hero-orbi-trust">
-                    No install · No code · {FREE_MONTHLY_AUDIT_LIMIT} free audit
-                    per month
-                  </p>
-                </div>
-                <HeroOrbiFeed />
-                <p className="hero-orbi-tagline">
-                  One report. Every issue on your page.
-                </p>
-              </div>
+              <HeroAuditFlow />
             </div>
           </section>
         </div>
