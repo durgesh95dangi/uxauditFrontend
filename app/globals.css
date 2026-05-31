@@ -1323,11 +1323,11 @@ p { margin: 0; }
 
 .hero-band-orbi:has(.hero-audit-phase--scan) .hero-orbi-container,
 .hero-band-orbi:has(.hero-audit-phase--results) .hero-orbi-container {
-  max-width: 1120px;
+  max-width: var(--grid-max);
 }
 
 .hero-orbi-container {
-  max-width: 920px;
+  max-width: var(--grid-max);
   margin-inline: auto;
 }
 
@@ -1362,6 +1362,7 @@ p { margin: 0; }
   line-height: 1.08;
   letter-spacing: -0.045em;
   color: #fff;
+  max-width: 24ch;
 }
 
 .hero-orbi-lead {
@@ -10247,9 +10248,68 @@ label.profile-row-label {
   .hero-audit-hints-row {
     justify-content: center;
   }
-  
-  .hero-audit-form {
-    margin-inline: auto;
+}
+
+.hero-orbi-container {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+/* New 2-Step How It Works Grid */
+.orbi-steps-row-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl);
+  margin-top: var(--space-3xl);
+}
+
+.orbi-step-card {
+  background: var(--gradient-card), var(--color-canvas-soft-2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-inset), var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.orbi-step-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-inset), 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.orbi-step-visual-wrapper {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.orbi-step-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+
+.orbi-step-card-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-body);
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .orbi-steps-row-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
   }
 }
 

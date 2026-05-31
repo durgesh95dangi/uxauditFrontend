@@ -2,83 +2,59 @@ import Link from "next/link";
 import { MONTHLY_AUDIT_LIMIT } from "../../lib/audit/limits.js";
 import LandingSolutionReportPreview from "./LandingSolutionReportPreview.jsx";
 import {
-  LandingInputPreview,
-  LandingProgressPreview
+  LandingInputPreview
 } from "./LandingUiPreviews.jsx";
 
 const STEPS = [
   {
     num: 1,
-    title: "UXAuditX opens your live site",
-    body: "We visit your URL the same way a first-time customer would — no install, no code.",
+    title: "1. Enter your website URL",
+    body: "Let UXAuditX visit your site like a real user to scan layout, CTAs, and mobile usability.",
     preview: "input"
   },
   {
     num: 2,
-    title: "Screens every section on phone & desktop",
-    body: "We scroll the full page, capture each section, and flag usability and conversion issues.",
-    preview: "progress"
-  },
-  {
-    num: 3,
-    title: "Delivers a prioritized report",
-    body: "The biggest problems rise to the top — each with a screenshot, why it matters, and a clear fix.",
+    title: "2. Get your professional report",
+    body: "Access a prioritized list of UX issues, complete with screenshots and recommended fixes.",
     preview: "report"
   }
 ];
 
 function StepVisual({ type }) {
   if (type === "input") return <LandingInputPreview />;
-  if (type === "progress") return <LandingProgressPreview />;
   return <LandingSolutionReportPreview />;
 }
 
 export default function OrbiSolutionSection() {
   return (
     <section id="how-it-works" className="section-band orbi-solution-band">
-      <div className="container orbi-solution-inner">
-        <div className="orbi-solution-copy">
-          <p className="orbi-solution-eyebrow">The solution</p>
-          <h2 className="orbi-solution-title">
-            Meet UXAuditX — your
-            <br />
-            UX review sidekick
-          </h2>
-          <p className="orbi-solution-lead">
-            UXAuditX reviews your website like a sharp-eyed visitor and drops
-            every issue into one clear, screenshot-backed report.
+      <div className="container">
+        <div className="section-header section-header-center">
+          <p className="orbi-solution-eyebrow">How it works</p>
+          <h2 className="section-title">Get your audit in 2 simple steps</h2>
+          <p className="section-lead" style={{ marginInline: "auto" }}>
+            UXAuditX does the tedious review work automatically. No code changes, no installation required.
           </p>
-          <div className="orbi-solution-cta">
-            <Link href="/signup" className="btn btn-primary orbi-solution-btn">
-              Get free website review
-            </Link>
-            <p className="orbi-solution-note">
-              {MONTHLY_AUDIT_LIMIT} free audit per month · No credit card
-            </p>
-          </div>
         </div>
 
-        <div className="orbi-solution-steps-col">
-          <ol className="orbi-solution-steps">
-            {STEPS.map((step) => (
-              <li key={step.num} className="orbi-solution-step">
-                <div className="orbi-solution-step-head">
-                  <span className="orbi-solution-step-num">{step.num}</span>
-                  <div className="orbi-solution-step-body">
-                    <h3>{step.title}</h3>
-                    <p>{step.body}</p>
-                  </div>
-                </div>
-                <div className={`orbi-solution-step-visual orbi-solution-step-visual--${step.preview}`}>
-                  <StepVisual type={step.preview} />
-                </div>
-              </li>
-            ))}
-          </ol>
+        <div className="orbi-steps-row-grid">
+          {STEPS.map((step) => (
+            <div key={step.num} className="orbi-step-card">
+              <div className="orbi-step-visual-wrapper orbi-solution-step-visual">
+                <StepVisual type={step.preview} />
+              </div>
+              <h3 className="orbi-step-card-title">{step.title}</h3>
+              <p className="orbi-step-card-desc">{step.body}</p>
+            </div>
+          ))}
+        </div>
 
-          <p className="orbi-solution-tagline">
-            UXAuditX does the tedious review work, so you can focus on fixing what
-            matters.
+        <div className="orbi-solution-cta" style={{ textAlign: "center", marginTop: "var(--space-2xl)" }}>
+          <Link href="/signup" className="btn btn-primary orbi-solution-btn">
+            Get free website review
+          </Link>
+          <p className="orbi-solution-note">
+            {MONTHLY_AUDIT_LIMIT} free audit per month · No credit card required
           </p>
         </div>
       </div>
