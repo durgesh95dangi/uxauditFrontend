@@ -26,8 +26,8 @@ test.describe("Landing hero audit flow", () => {
     await expect(
       page.getByRole("button", { name: "Audit my site" })
     ).toBeVisible();
-    await expect(page.locator(".hero-audit-hint")).toContainText("Free instant report");
-    await expect(page.locator(".hero-audit-hint")).toContainText("Results in 1–2 min");
+    await expect(page.locator(".hero-audit-hints-row")).toContainText("Free instant report");
+    await expect(page.locator(".hero-audit-hints-row")).toContainText("Results in 1–2 min");
   });
 
   test("shows validation error for empty URL", async ({ page }) => {

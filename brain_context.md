@@ -54,7 +54,7 @@ UXAuditX is an automated SaaS platform that performs website user experience (UX
 ## 4. Key Execution Workflows
 
 ### A. The Landing Page & Unlock Flow
-1. **Interactive Hero:** The user visits `/`, sees the hero section backed by `<InteractiveBackground />` (canvas grid + radial cursor-glow).
+1. **Interactive Hero:** The user visits `/`, sees a split two-column hero section backed by `<InteractiveBackground />` (canvas grid + radial cursor-glow). The left column holds left-aligned headings and input fields, while the right column shows a live CSS-animated mockup of an audit report loading critical UX issues sequentially.
 2. **Demo Audit:** The user enters a URL and clicks **Audit my site**. It starts a demo (mock) audit:
    - Sets the phase to `scan` and triggers `AuditProgress` for 20 seconds.
    - Transitions to the `results` view showing 3 sample issues (`HeroAuditResults.jsx`) and a blurred lock overlay for the remaining findings.
@@ -129,6 +129,8 @@ The website is styled using CSS custom variables in `app/globals.css` with a hig
 - **Secondary Tones:** `--color-purple-mid: #5C3E94` and `--color-purple-deep: #412B6B`.
 - **Interactive Background:** `<InteractiveBackground />` sets `--mouse-x` and `--mouse-y` dynamically. It applies a dual radial background gradient that merges `#F25912` (orange glow) with purple highlights following the user's cursor.
 - **Hero & Input Heights:** Hero section is set to `min-height: 70svh` to occupy 70% of the viewport. Input forms and action buttons in the hero section are set to `58px` for maximum visibility and ease of interaction.
+- **Hero Split Layout:** The main hero fold uses a two-column grid (`.hero-split-layout`) on viewports above `960px`, left-aligning the input form and benefits copy on the left, and placing an interactive, animated HTML report card simulation on the right.
+- **Benefit Badges:** The subheadline highlights "Free instant report" and "Results in 1-2 min" as two separate badges (`.hero-audit-hint-badge`) styled with thin coral borders and transparent backgrounds.
 - **Testimonials Section:** Testimonials cards reside in `.testimonial-grid` styled with `var(--gradient-card)` backgrounds matching the branding. Individual `.testimonial-card`s have micro-animations (hover translate lift) and `.testimonial-avatar`s styled with brand orange-to-coral gradients. A media query for viewports `<= 960px` reflows the grid layout into a clean single-column stack.
 
 ---
